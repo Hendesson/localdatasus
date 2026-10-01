@@ -1,0 +1,32 @@
+# Avisa o site (hendesson.github.io) que o pacote mudou, para que ele seja
+# montado de novo na hora, com a versão, as novidades e a citação novas.
+#
+# Precisa (uma vez) do segredo SITE_TOKEN: um token do GitHub com permissão
+# "Contents: Read and write" no repositório hendesson.github.io.
+# Sem o segredo, nada quebra: o site se atualiza sozinho uma vez por dia.
+name: Avisar o site
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+
+jobs:
+  avisar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pedir ao site que se atualize
+        env:
+          SITE_TOKEN: ${{ secrets.SITE_TOKEN }}
+        run: |
+          if [ -z "$SITE_TOKEN" ]; then
+            echo "Segredo SITE_TOKEN não configurado: o site se atualiza na rodada diária."
+            exit 0
+          fi
+          curl -sS -f -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $SITE_TOKEN" \
+            https://api.github.com/repos/Hendesson/hendesson.github.io/dispatches \
+            -d '{"event_type": "projeto-atualizado", "client_payload": {"projeto": "${{ github.repository }}"}}'
+          echo "Site avisado."

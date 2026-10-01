@@ -268,6 +268,12 @@ Os arquivos ficam em `tools::R_user_dir("localdatasus", "cache")`, e há duas fo
 - **Pasta:** troque-a com `options(localdatasus.cache = "...")`.
 - **Tamanho:** o CNEFE de cada UF (de ~10 MB no AC a ~1 GB em SP) é baixado uma vez e apagado depois de processado; só a tabela CEP → bairro fica guardada. `limpar_cache()` apaga tudo.
 
+## Como citar
+
+> Alves, Hendesson (2026). *localdatasus: Dados de Saúde do SUS por Bairro (Escala Local)*. Pacote R. <https://github.com/Hendesson/localdatasus>
+
+No R, `citation("localdatasus")` mostra a citação com a versão instalada e a entrada BibTeX.
+
 ## Logo
 
 O logo homenageia o mapa da cólera de **John Snow** (Londres, 1854), que ligou as mortes à bomba d'água da Broad Street e se tornou o marco zero da epidemiologia espacial. Ele usa os dados reais do mapa: as ruas do Soho (linhas pretas) e as 578 mortes (pontos vermelhos). Os dados vêm do pacote [HistData](https://cran.r-project.org/package=HistData) (`Snow.streets`, `Snow.deaths`). O script que gera o logo está em `data-raw/logo.py`.
