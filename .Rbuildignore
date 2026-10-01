@@ -1,0 +1,5 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^exemplos$
+^data-raw$
+^resultados$

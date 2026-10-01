@@ -1,0 +1,42 @@
+Package: localdatasus
+Type: Package
+Title: Dados de Saúde do SUS por Bairro (Escala Local)
+Version: 0.1.0
+Authors@R:
+    person("Hendesson", "Alves", role = c("aut", "cre"),
+           email = "hendesson124@gmail.com")
+Description: Dados de saúde do SUS por bairro, com população, taxas por
+    10 mil habitantes, coordenadas e mapas. Funções simples buscam óbitos,
+    nascimentos, agravos de notificação e internações por bairro, escolhendo
+    sozinhas a fonte: microdados com CEP do paciente (SIH e APACs do SIA,
+    via microdatasus; SINASC da Secretaria de Saúde do Rio de Janeiro) ou
+    os TabNets regionais que tabulam por bairro ou distrito (Rio de
+    Janeiro, São Paulo e Santa Catarina). CEPs e nomes de bairro são
+    ligados aos bairros oficiais do IBGE pelo Cadastro Nacional de
+    Endereços para Fins Estatísticos (CNEFE) e pelos setores do Censo 2022,
+    com regras de qualidade para CEPs genéricos. Inclui mapas estáticos e
+    interativos e mensagens de erro com código e sugestão de solução.
+URL: https://github.com/Hendesson/localdatasus, https://hendesson.github.io/projetos/localdatasus/
+BugReports: https://github.com/Hendesson/localdatasus/issues
+License: MIT + file LICENSE
+Encoding: UTF-8
+Language: pt-BR
+Depends:
+    R (>= 4.1.0)
+Imports:
+    curl,
+    data.table,
+    jsonlite,
+    microdatasus,
+    stats,
+    tools,
+    utils
+Remotes:
+    rfsaldanha/microdatasus
+Suggests:
+    ggplot2,
+    leaflet,
+    sf,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+RoxygenNote: 7.3.2
