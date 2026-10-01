@@ -46,6 +46,19 @@ para_na <- function(x) {
   x
 }
 
+# TRUE se um campo de configuração está vazio (NULL, NA ou "").
+vazio <- function(x) {
+  is.null(x) || length(x) == 0 || is.na(x[1]) || identical(x[1], "")
+}
+
+# Tipos de ligação de nome que contam como "achou o bairro no IBGE".
+.ligacoes_ok <- c("exata", "sem numera\u00e7\u00e3o", "parcial", "aproximada")
+
+# TRUE para as ligações que acharam o bairro (ou distrito) no IBGE.
+foi_ligado <- function(ligacao) {
+  ligacao %in% .ligacoes_ok
+}
+
 #' Apaga os arquivos baixados e as tabelas em cache
 #'
 #' O pacote guarda em cache os arquivos do IBGE e as tabelas CEP-bairro já

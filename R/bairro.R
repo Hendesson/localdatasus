@@ -150,7 +150,7 @@ baixar_bairro <- function(sistema, uf, ano_inicio, ano_fim = ano_inicio,
 
   # APAC: pseudônimo do cartão SUS em texto (hexadecimal) — o original tem
   # bytes que não são texto válido e quebram exportações.
-  col_id <- if (is.na(cfg$col_id)) NULL else cfg$col_id
+  col_id <- if (vazio(cfg$col_id)) NULL else cfg$col_id
   if (identical(col_id, "AP_CNSPCN")) {
     d[, id_paciente := vapply(as.character(AP_CNSPCN), function(s)
       paste(as.character(charToRaw(s)), collapse = ""), character(1), USE.NAMES = FALSE)]
@@ -160,7 +160,7 @@ baixar_bairro <- function(sistema, uf, ano_inicio, ano_fim = ano_inicio,
   res <- adicionar_bairro(as.data.frame(d), uf, col_cep = cfg$col_cep, col_mun = cfg$col_mun,
                           col_id = col_id, pct_min = pct_min, limite_excesso = limite_excesso)
   res$origem_bairro <- ifelse(is.na(res$id_bairro), NA_character_, "CEP")
-  if (!is.na(cfg$col_bairro)) res <- completar_pelo_nome(res, cfg$col_bairro, uf)
+  if (!vazio(cfg$col_bairro)) res <- completar_pelo_nome(res, cfg$col_bairro, uf)
   res
 }
 
@@ -212,7 +212,7 @@ completar_pelo_nome <- function(res, col_bairro, uf) {
                     substr(res$codmun_paciente, 1, 2) == codigo_uf(uf))
   if (length(faltam) == 0) return(res)
   lig <- ligar_bairros(res[[col_bairro]][faltam], res$codmun_paciente[faltam], uf)
-  ok <- lig$ligacao %in% c("exata", "sem numera\u00e7\u00e3o", "parcial", "aproximada")
+  ok <- foi_ligado(lig$ligacao)
   i <- faltam[ok]
   b <- cep_bairro(uf)$bairros
   m <- match(lig$id_unidade[ok], b$id_bairro)

@@ -14,7 +14,8 @@ internacoes_bairro(municipio = NULL, anos, cid = NULL, uf = NULL)
 
 \item{cid}{Diagnóstico principal: letras (`"I"`) ou códigos (`"I21"`).}
 
-\item{uf}{Sigla da UF onde as internações aconteceram (obrigatória).}
+\item{uf}{Sigla da UF. Opcional quando `municipio` é dado (a UF sai do
+município); com `municipio = NULL`, pega a UF inteira.}
 }
 \value{
 Um `data.frame` por bairro e ano com `internacoes`,

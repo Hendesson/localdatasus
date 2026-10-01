@@ -58,7 +58,13 @@ malha_ibge <- function(uf, unidade = c("bairro", "distrito")) {
 # valor a pintar e colunas para dividir em painéis (ano, categoria).
 preparar_mapa <- function(dados, valor) {
   d <- as.data.frame(dados)
-  pega <- function(...) { for (n in c(...)) if (n %in% names(d)) return(d[[n]]); NULL }
+  # A primeira coluna que existir entre os nomes dados (as funções do pacote
+  # usam nomes diferentes para a mesma coisa).
+  pega <- function(...) {
+    nome <- intersect(c(...), names(d))
+    if (length(nome) == 0) return(NULL)
+    d[[nome[1]]]
+  }
   unidade <- if ("distrito" %in% names(d)) "distrito" else "bairro"
   codigo <- pega("codigo_ibge", "cd_bairro_ibge", "cd_ibge")
   lat <- pega("lat", "lat_bairro")
@@ -136,8 +142,10 @@ mapa_bairro <- function(dados, valor = NULL, titulo = NULL, cores = "Reds") {
   p <- preparar_mapa(dados, valor)
   base <- contornos(p)
   g <- ggplot2::ggplot()
-  com_poligono <- if (is.null(base)) p$d[0, ] else p$d[!is.na(p$d$codigo) & p$d$codigo %in% base$codigo, ]
-  pontos <- p$d[!(p$d$codigo %in% com_poligono$codigo) & !is.na(p$d$lat) & !is.na(p$d$valor_mapa), ]
+  codigos_malha <- if (is.null(base)) character() else base$codigo
+  tem_poligono <- !is.na(p$d$codigo) & p$d$codigo %in% codigos_malha
+  com_poligono <- p$d[tem_poligono, ]
+  pontos <- p$d[!tem_poligono & !is.na(p$d$lat) & !is.na(p$d$valor_mapa), ]
 
   if (!is.null(base)) {
     g <- g + ggplot2::geom_sf(data = base, fill = "grey93", color = "white", linewidth = 0.15)
@@ -217,7 +225,8 @@ mapa_interativo <- function(dados, valor = NULL, cores = "Reds") {
                    format(round(10000 * a$contagem / a$populacao, 2), decimal.mark = ","),
                    format(a$populacao, big.mark = ".", decimal.mark = ","))
   m <- leaflet::addProviderTiles(leaflet::leaflet(), "CartoDB.Positron")
-  com_poligono <- !is.null(base) & !is.na(a$codigo) & a$codigo %in% if (is.null(base)) character() else base$codigo
+  codigos_malha <- if (is.null(base)) character() else base$codigo
+  com_poligono <- !is.na(a$codigo) & a$codigo %in% codigos_malha
   if (any(com_poligono)) {
     pol <- merge(base[, "codigo"], data.frame(a[com_poligono, ], texto = texto[com_poligono]), by = "codigo")
     pol <- sf::st_transform(pol, 4326)

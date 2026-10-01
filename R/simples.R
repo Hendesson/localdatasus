@@ -6,6 +6,10 @@
 # ---------------------------------------------------------------------------
 # Lugar
 
+# Capitais com TabNet próprio (códigos IBGE de 6 dígitos).
+COD_RIO       <- "330455"
+COD_SAO_PAULO <- "355030"
+
 # Acha um município pelo nome (sem ligar para acentos e maiúsculas) ou pelo
 # código; devolve código (6 dígitos), nome e UF.
 achar_municipio <- function(municipio, uf = NULL) {
@@ -64,7 +68,7 @@ expandir_cid <- function(cid) {
 filtros_cid <- function(cfg, form, cid) {
   if (is.null(cid)) return(list())
   cid <- toupper(gsub("[[:space:].]", "", cid))
-  if (is.na(cfg$filtro_capitulo)) {
+  if (vazio(cfg$filtro_capitulo)) {
     erro("LDS-09", "A fonte ", cfg$fonte, " n\u00e3o permite filtrar por CID.")
   }
   if (all(nchar(cid) == 1)) {
@@ -150,7 +154,7 @@ consultar_simples <- function(fontes, anos, cid, por, lugar, contagem) {
     form <- tn_formulario(cfg$url_def, cfg$dialeto)
     coluna <- if (is.null(por)) NULL else achar_coluna(cfg, por)
     if (!is.null(por) && is.null(nome_por)) nome_por <- nome_coluna(por)
-    municipios <- if (!is.na(cfg$filtro_mun) && !is.na(lugar$codmun)) lugar$codmun else NULL
+    municipios <- if (!vazio(cfg$filtro_mun) && !is.na(lugar$codmun)) lugar$codmun else NULL
     r <- tabnet_bairro(f, plano[[f]], coluna = coluna, filtros = filtros_cid(cfg, form, cid),
                        municipios = municipios)
     if (nrow(r) == 0) next
@@ -168,7 +172,7 @@ consultar_simples <- function(fontes, anos, cid, por, lugar, contagem) {
 # ligado), ano e categoria, com nomes de colunas legíveis.
 arrumar_tabela <- function(d, nome_por, contagem) {
   if (!"categoria" %in% names(d)) d[, categoria := NA_character_]
-  ligado <- d$ligacao %in% c("exata", "sem numera\u00e7\u00e3o", "parcial", "aproximada")
+  ligado <- foi_ligado(d$ligacao)
   d[, chave := data.table::fifelse(ligado, id_unidade, paste0("site:", bairro_tabnet))]
   d[, nome_final := data.table::fifelse(ligado, nome_ibge, bairro_tabnet)]
   t <- d[, .(n = sum(n),
@@ -186,7 +190,7 @@ arrumar_tabela <- function(d, nome_por, contagem) {
   # order() da base respeita acentos (\u00c1gua Rasa antes de Alto...).
   saida <- saida[order(saida$ano, saida$municipio, saida[[unidade]]), ]
   rownames(saida) <- NULL
-  ok <- saida$ligacao %in% c("exata", "sem numera\u00e7\u00e3o", "parcial", "aproximada")
+  ok <- foi_ligado(saida$ligacao)
   pct <- 100 * sum(saida[[contagem]][ok]) / sum(saida[[contagem]])
   message(sprintf("Pronto: %s %s em %d %ss; %.1f%% ligados a um %s do IBGE.",
                   format(sum(saida[[contagem]]), big.mark = ".", decimal.mark = ","), contagem,
@@ -231,11 +235,16 @@ arrumar_tabela <- function(d, nome_por, contagem) {
 #' }
 obitos_bairro <- function(municipio = NULL, anos, cid = NULL, por = NULL, uf = NULL) {
   lugar <- achar_lugar(municipio, uf)
-  fontes <- if (identical(lugar$codmun, "330455")) "RIO-SIM" else
-    if (identical(lugar$codmun, "355030")) "SP-SIM" else
-    if (lugar$uf == "RJ") "SES-RJ-SIM" else character()
-  if (length(fontes) == 0) sem_fonte("\u00f3bitos", lugar)
-  consultar_simples(fontes, anos, cid, por, lugar, "obitos")
+  if (identical(lugar$codmun, COD_RIO)) {
+    fonte <- "RIO-SIM"
+  } else if (identical(lugar$codmun, COD_SAO_PAULO)) {
+    fonte <- "SP-SIM"
+  } else if (lugar$uf == "RJ") {
+    fonte <- "SES-RJ-SIM"
+  } else {
+    sem_fonte("\u00f3bitos", lugar)
+  }
+  consultar_simples(fonte, anos, cid, por, lugar, "obitos")
 }
 
 #' Nascimentos por bairro
@@ -258,8 +267,12 @@ obitos_bairro <- function(municipio = NULL, anos, cid = NULL, por = NULL, uf = N
 #' }
 nascimentos_bairro <- function(municipio = NULL, anos, por = NULL, uf = NULL) {
   lugar <- achar_lugar(municipio, uf)
-  if (identical(lugar$codmun, "330455")) return(consultar_simples("RIO-SINASC", anos, NULL, por, lugar, "nascimentos"))
-  if (identical(lugar$codmun, "355030")) return(consultar_simples("SP-SINASC", anos, NULL, por, lugar, "nascimentos"))
+  if (identical(lugar$codmun, COD_RIO)) {
+    return(consultar_simples("RIO-SINASC", anos, NULL, por, lugar, "nascimentos"))
+  }
+  if (identical(lugar$codmun, COD_SAO_PAULO)) {
+    return(consultar_simples("SP-SINASC", anos, NULL, por, lugar, "nascimentos"))
+  }
   if (lugar$uf != "RJ") sem_fonte("nascimentos", lugar)
   # Demais municípios do RJ: microdados da SES-RJ, agregados aqui.
   d <- baixar_bairro("SINASC-RJ", "RJ", min(anos), max(anos))
@@ -320,10 +333,15 @@ agregar_registros <- function(d, por, contagem, fonte) {
 #' }
 agravos_bairro <- function(agravo, municipio = NULL, anos, por = NULL, uf = NULL) {
   lugar <- achar_lugar(municipio, uf)
-  prefixo <- if (identical(lugar$codmun, "330455")) "RIO-SINAN-" else
-    if (identical(lugar$codmun, "355030")) "SP-SINAN-" else
-    if (lugar$uf == "SC") "SC-SINAN-" else NA
-  if (is.na(prefixo)) sem_fonte(paste("casos de", agravo), lugar)
+  if (identical(lugar$codmun, COD_RIO)) {
+    prefixo <- "RIO-SINAN-"
+  } else if (identical(lugar$codmun, COD_SAO_PAULO)) {
+    prefixo <- "SP-SINAN-"
+  } else if (lugar$uf == "SC") {
+    prefixo <- "SC-SINAN-"
+  } else {
+    sem_fonte(paste("casos de", agravo), lugar)
+  }
   f <- .fontes_tabnet[startsWith(.fontes_tabnet$fonte, prefixo), ]
   chave <- normalizar_rotulo(gsub("-", " ", sub(prefixo, "", f$fonte, fixed = TRUE)))
   desc  <- normalizar_rotulo(f$descricao)
@@ -351,7 +369,8 @@ agravos_bairro <- function(agravo, municipio = NULL, anos, por = NULL, uf = NULL
 #' [sih_bairro()] com a mesma sintaxe das outras funções simples.
 #'
 #' @inheritParams obitos_bairro
-#' @param uf Sigla da UF onde as internações aconteceram (obrigatória).
+#' @param uf Sigla da UF. Opcional quando `municipio` é dado (a UF sai do
+#'   município); com `municipio = NULL`, pega a UF inteira.
 #' @param anos Anos de internação.
 #' @param cid Diagnóstico principal: letras (`"I"`) ou códigos (`"I21"`).
 #' @return Um `data.frame` por bairro e ano com `internacoes`,
@@ -383,15 +402,23 @@ internacoes_bairro <- function(municipio = NULL, anos, cid = NULL, uf = NULL) {
 #' onde_tem_bairro()
 onde_tem_bairro <- function() {
   f <- .fontes_tabnet
-  local <- ifelse(startsWith(f$fonte, "RIO-"), "Rio de Janeiro (capital)",
-           ifelse(startsWith(f$fonte, "SP-"), "S\u00e3o Paulo (capital)",
-           ifelse(startsWith(f$fonte, "SC-"), "Santa Catarina (todos os munic\u00edpios)",
-                  "Rio de Janeiro (todos os munic\u00edpios)")))
-  funcao <- ifelse(f$sistema == "SIM", "obitos_bairro()",
-            ifelse(f$sistema == "SINASC", "nascimentos_bairro()", "agravos_bairro()"))
-  dado <- ifelse(funcao == "agravos_bairro()",
-                 gsub("-", " ", tolower(sub("^[A-Z]+-SINAN-", "", f$fonte))),
-                 ifelse(funcao == "obitos_bairro()", "\u00f3bitos", "nascimentos"))
+  prefixo <- sub("-.*", "", f$fonte)          # "RIO", "SP", "SC" ou "SES"
+  local <- vapply(prefixo, function(p) switch(p,
+    RIO = "Rio de Janeiro (capital)",
+    SP  = "S\u00e3o Paulo (capital)",
+    SC  = "Santa Catarina (todos os munic\u00edpios)",
+    "Rio de Janeiro (todos os munic\u00edpios)"
+  ), character(1), USE.NAMES = FALSE)
+  funcao <- vapply(f$sistema, function(s) switch(s,
+    SIM    = "obitos_bairro()",
+    SINASC = "nascimentos_bairro()",
+    "agravos_bairro()"
+  ), character(1), USE.NAMES = FALSE)
+  dado <- vapply(seq_along(funcao), function(i) switch(funcao[i],
+    "obitos_bairro()"      = "\u00f3bitos",
+    "nascimentos_bairro()" = "nascimentos",
+    gsub("-", " ", tolower(sub("^[A-Z]+-SINAN-", "", f$fonte[i])))
+  ), character(1))
   tab <- data.frame(dado, descricao = f$descricao, local, unidade = f$unidade, funcao,
                     fonte = f$fonte, stringsAsFactors = FALSE)
   extra <- data.frame(

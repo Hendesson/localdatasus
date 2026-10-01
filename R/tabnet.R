@@ -47,10 +47,10 @@ tn_http <- function(url, corpo = NULL, tentativas = 3) {
     if (!inherits(r, "error") && r$status_code == 200) {
       return(iconv(rawToChar(r$content), from = "latin1", to = "UTF-8"))
     }
-    erro <- if (inherits(r, "error")) conditionMessage(r) else paste("HTTP", r$status_code)
+    motivo <- if (inherits(r, "error")) conditionMessage(r) else paste("HTTP", r$status_code)
     if (i < tentativas) Sys.sleep(5 * i)
   }
-  erro("LDS-13", "Falha ao acessar ", url, " (", erro, ")")
+  erro("LDS-13", "Falha ao acessar ", url, " (", motivo, ")")
 }
 
 # Lê o formulário de uma página .def: para cada <SELECT>, o nome, o id e as
@@ -119,8 +119,8 @@ tn_campo_filtro <- function(form, rotulo) {
 # idêntico, depois o rótulo que COMEÇA com o texto pedido.
 tn_valores <- function(form, campo, rotulos) {
   op <- form$opcoes[[campo]]
+  rot <- normalizar_rotulo(op$rotulo)
   vapply(rotulos, function(r) {
-    rot <- normalizar_rotulo(op$rotulo)
     alvo <- normalizar_rotulo(r)
     # 1) rótulo idêntico; 2) começa com o texto e logo depois vem um
     # separador ("X" acha "X. Doenças..." mas não "XI. ..."); 3) só começa.
@@ -148,7 +148,7 @@ tn_campo_periodo <- function(form) {
   nome[1]
 }
 
-# Faz UMA consulta e devolve um data.frame longo (linha, coluna, n).
+# Faz UMA consulta e devolve um data.frame longo (linha, categoria, n).
 tn_consultar <- function(form, linha, coluna, incremento, periodos, filtros) {
   campo_per <- tn_campo_periodo(form)
   campos <- c(
@@ -173,7 +173,7 @@ tn_consultar <- function(form, linha, coluna, incremento, periodos, filtros) {
   html <- tn_http(form$envio, corpo)
 
   if (grepl("Nenhum registro selecionado", html, fixed = TRUE)) {
-    return(data.frame(linha = character(), coluna = character(), n = numeric()))
+    return(data.frame(linha = character(), categoria = character(), n = numeric()))
   }
   if (form$dialeto == "dhx") {
     link <- regmatches(html, regexpr("csv/[^ >\"']*\\.csv", html))
@@ -197,9 +197,10 @@ tn_consultar <- function(form, linha, coluna, incremento, periodos, filtros) {
   # Vírgula decimal (ex.: taxas "12,5"): o ponto, nesse caso, é de milhar.
   if (any(grepl(",", n, fixed = TRUE))) n <- gsub(",", ".", gsub(".", "", n, fixed = TRUE), fixed = TRUE)
   n <- as.numeric(n)
-  data.frame(linha  = trimws(rep(tab[[1]], times = ncol(valores))),
-             coluna = if (is.null(coluna)) NA_character_ else trimws(rep(names(valores), each = nrow(valores))),
-             n      = n, stringsAsFactors = FALSE)
+  categoria <- if (is.null(coluna)) NA_character_ else trimws(rep(names(valores), each = nrow(valores)))
+  data.frame(linha     = trimws(rep(tab[[1]], times = ncol(valores))),
+             categoria = categoria,
+             n         = n, stringsAsFactors = FALSE)
 }
 
 
@@ -243,7 +244,7 @@ tabnet_opcoes <- function(fonte, tipo = c("colunas", "filtros", "incrementos", "
 # Anos disponíveis: rótulos dos arquivos ou, se cada arquivo junta vários
 # anos, as opções do filtro de ano.
 anos_fonte <- function(cfg, form) {
-  if (is.null(cfg$filtro_ano) || is.na(cfg$filtro_ano)) {
+  if (vazio(cfg$filtro_ano)) {
     a <- form$opcoes[[tn_campo_periodo(form)]]$rotulo
   } else {
     a <- form$opcoes[[tn_campo_filtro(form, cfg$filtro_ano)]]$rotulo
@@ -253,7 +254,7 @@ anos_fonte <- function(cfg, form) {
 
 # Interpreta "Campo=Opção;Campo2=Opção" (coluna filtros_fixos do cadastro).
 ler_filtros_fixos <- function(x) {
-  if (is.null(x) || is.na(x) || x == "") return(list())
+  if (vazio(x)) return(list())
   pares <- strsplit(strsplit(x, ";", fixed = TRUE)[[1]], "=", fixed = TRUE)
   stats::setNames(lapply(pares, `[`, 2), vapply(pares, `[`, character(1), 1))
 }
@@ -270,7 +271,7 @@ tn_consultar_cache <- function(cfg, form, ano, coluna, incremento, filtros) {
   arq <- file.path(pasta, paste0(unname(tools::md5sum(tmp)), ".rds"))
   unlink(tmp)
   if (file.exists(arq)) return(readRDS(arq))
-  if (is.null(cfg$filtro_ano) || is.na(cfg$filtro_ano)) {
+  if (vazio(cfg$filtro_ano)) {
     periodos <- ano
   } else {
     # Arquivos com vários anos: consulta todos e filtra o ano pedido.
@@ -334,7 +335,7 @@ tabnet_bairro <- function(fonte, anos, coluna = NULL, filtros = list(), incremen
   cfg  <- config_fonte(fonte)
   form <- tn_formulario(cfg$url_def, cfg$dialeto)
   if (is.null(incremento)) {
-    incremento <- if (is.na(cfg$incremento)) form$opcoes$Incremento$rotulo[1] else cfg$incremento
+    incremento <- if (vazio(cfg$incremento)) form$opcoes$Incremento$rotulo[1] else cfg$incremento
   }
   filtros <- c(ler_filtros_fixos(cfg$filtros_fixos), filtros)
   disponiveis <- anos_fonte(cfg, form)
@@ -343,14 +344,14 @@ tabnet_bairro <- function(fonte, anos, coluna = NULL, filtros = list(), incremen
     avisar("LDS-11", "Anos fora da base, ignorados: ", paste(faltam, collapse = ", "))
     anos <- intersect(as.character(anos), disponiveis)
   }
-  por_municipio <- !is.na(cfg$filtro_mun)
+  por_municipio <- !vazio(cfg$filtro_mun)
 
   partes <- list()
   for (ano in as.character(anos)) {
     if (!por_municipio) {
       detalhar(cfg$fonte, " ", ano, "...")
       r <- tn_consultar_cache(cfg, form, ano, coluna, incremento, filtros)
-      if (nrow(r) > 0) r$codmun <- if (is.na(cfg$codmun)) NA_character_ else cfg$codmun
+      if (nrow(r) > 0) r$codmun <- if (vazio(cfg$codmun)) NA_character_ else cfg$codmun
     } else {
       # 1) Quais municípios têm registros neste ano?
       cfg_mun <- cfg; cfg_mun$linha <- cfg$filtro_mun
@@ -367,8 +368,7 @@ tabnet_bairro <- function(fonte, anos, coluna = NULL, filtros = list(), incremen
         if (nrow(rk) > 0) rk$codmun <- cods[k]
         r[[k]] <- rk
       }
-      r <- do.call(rbind, r)
-      if (is.null(r)) next
+      r <- data.table::rbindlist(r, fill = TRUE)
     }
     if (nrow(r) == 0) next
     r$ano <- as.integer(ano)
@@ -385,7 +385,7 @@ tabnet_bairro <- function(fonte, anos, coluna = NULL, filtros = list(), incremen
   # ".....CENTRO" = bairro): tiramos os pontos antes de aplicar as regras.
   d[, linha := sub("^\\.+", "", linha)]
   # Linhas que não são bairro (ex.: subtotais por AP e RA no TabNet do Rio).
-  if (!is.na(cfg$descartar)) d <- d[!grepl(cfg$descartar, linha, perl = TRUE)]
+  if (!vazio(cfg$descartar)) d <- d[!grepl(cfg$descartar, linha, perl = TRUE)]
 
   # Rótulo -> município e bairro.
   d[, bairro_tabnet := linha]
@@ -404,7 +404,6 @@ tabnet_bairro <- function(fonte, anos, coluna = NULL, filtros = list(), incremen
   d <- nomes_mun[d, on = "codmun"]
 
   d[, fonte := cfg$fonte]
-  d[, categoria := coluna]
   saida <- d[, .(fonte, ano, codmun, municipio, bairro_tabnet, categoria, n)]
   if (is.null(coluna)) saida[, categoria := NULL]
 
@@ -418,7 +417,7 @@ tabnet_bairro <- function(fonte, anos, coluna = NULL, filtros = list(), incremen
     resumo <- saida[, .(n = sum(n)), by = ligacao][, pct := round(100 * n / sum(n), 1)][order(-n)]
     attr(saida, "ligacao") <- as.data.frame(resumo)
     detalhar(sprintf("%.1f%% das contagens ligadas a um %s do IBGE.",
-                    100 * sum(saida$n[saida$ligacao %in% c("exata", "sem numera\u00e7\u00e3o", "parcial", "aproximada")]) /
+                    100 * sum(saida$n[foi_ligado(saida$ligacao)]) /
                       sum(saida$n), cfg$unidade))
   }
   as.data.frame(saida)
