@@ -7,7 +7,10 @@
 # Funciona com a tabela de qualquer função do pacote. Os contornos dos
 # bairros são os oficiais do IBGE (Censo 2022), baixados uma vez.
 # Precisa (uma vez): install.packages(c("sf", "ggplot2", "leaflet"))
-
+install.packages(c("sf", "ggplot2", "leaflet"))
+library(sf)
+library(ggplot2)
+library(leaflet)
 library(localdatasus)
 dir.create("resultados", showWarnings = FALSE)
 
