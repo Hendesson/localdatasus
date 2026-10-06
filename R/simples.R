@@ -9,6 +9,7 @@
 # Capitais com TabNet próprio (códigos IBGE de 6 dígitos).
 COD_RIO       <- "330455"
 COD_SAO_PAULO <- "355030"
+COD_FORTALEZA <- "230440"
 
 # Acha um município pelo nome (sem ligar para acentos e maiúsculas) ou pelo
 # código; devolve código (6 dígitos), nome e UF.
@@ -82,6 +83,9 @@ filtros_cid <- function(cfg, form, cid) {
       grepl(paste0("^Cap.tulo\\s+(", paste(nums, collapse = "|"), ")\\b"), rot)
     if (!any(pega)) erro("LDS-09", "Cap\u00edtulo da CID n\u00e3o encontrado na fonte ", cfg$fonte, ".")
     return(stats::setNames(list(rot[pega]), cfg$filtro_capitulo))
+  }
+  if (vazio(cfg$filtro_cid3)) {
+    erro("LDS-09", "A fonte ", cfg$fonte, " s\u00f3 filtra por cap\u00edtulo da CID: use letras (\"I\", \"J\").")
   }
   cid <- expandir_cid(cid)
   if (any(nchar(cid) != 3)) {
@@ -157,9 +161,9 @@ consultar_simples <- function(fontes, anos, cid, por, lugar, contagem) {
     municipios <- if (!vazio(cfg$filtro_mun) && !is.na(lugar$codmun)) lugar$codmun else NULL
     r <- tabnet_bairro(f, plano[[f]], coluna = coluna, filtros = filtros_cid(cfg, form, cid),
                        municipios = municipios)
-    if (nrow(r) == 0) next
     # Fonte estadual e pedido de UM município: fica só com ele.
     if (!is.na(lugar$codmun)) r <- r[!is.na(r$codmun) & r$codmun == lugar$codmun, ]
+    if (nrow(r) == 0) next
     r$unidade <- cfg$unidade
     partes[[length(partes) + 1]] <- data.table::as.data.table(r)
   }
@@ -206,8 +210,9 @@ arrumar_tabela <- function(d, nome_por, contagem) {
 #' Conta os óbitos de residentes por bairro (ou distrito), ano a ano, com
 #' população, taxa por 10 mil habitantes e coordenadas de cada bairro. A
 #' fonte é escolhida sozinha pelo lugar: TabNet da Prefeitura do Rio
-#' (2006+), da Prefeitura de São Paulo (distritos, 2006+) ou da SES-RJ
-#' (demais municípios do RJ, bairro a partir de 2011). Veja [onde_tem_bairro()].
+#' (2006+), da Prefeitura de São Paulo (distritos, 2006+), da Prefeitura de
+#' Fortaleza (1999+, só capítulos da CID) ou da SES-RJ (demais municípios
+#' do RJ, bairro a partir de 2011). Veja [onde_tem_bairro()].
 #'
 #' @param municipio Nome ou código IBGE do município, por exemplo
 #'   `"Rio de Janeiro"`, `"Niterói"` ou `"355030"`.
@@ -239,6 +244,8 @@ obitos_bairro <- function(municipio = NULL, anos, cid = NULL, por = NULL, uf = N
     fonte <- "RIO-SIM"
   } else if (identical(lugar$codmun, COD_SAO_PAULO)) {
     fonte <- "SP-SIM"
+  } else if (identical(lugar$codmun, COD_FORTALEZA)) {
+    fonte <- "FOR-SIM"
   } else if (lugar$uf == "RJ") {
     fonte <- "SES-RJ-SIM"
   } else {
@@ -251,7 +258,7 @@ obitos_bairro <- function(municipio = NULL, anos, cid = NULL, por = NULL, uf = N
 #'
 #' Conta os nascidos vivos de mães residentes por bairro (ou distrito),
 #' ano a ano, com população, taxa por 10 mil e coordenadas. Fontes: TabNet
-#' da Prefeitura do Rio e de São Paulo; nos demais municípios do RJ, os
+#' das Prefeituras do Rio, de São Paulo e de Fortaleza; nos demais municípios do RJ, os
 #' microdados da SES-RJ, localizados pelo CEP e pelo nome do bairro da mãe.
 #'
 #' @inheritParams obitos_bairro
@@ -272,6 +279,9 @@ nascimentos_bairro <- function(municipio = NULL, anos, por = NULL, uf = NULL) {
   }
   if (identical(lugar$codmun, COD_SAO_PAULO)) {
     return(consultar_simples("SP-SINASC", anos, NULL, por, lugar, "nascimentos"))
+  }
+  if (identical(lugar$codmun, COD_FORTALEZA)) {
+    return(consultar_simples("FOR-SINASC", anos, NULL, por, lugar, "nascimentos"))
   }
   if (lugar$uf != "RJ") sem_fonte("nascimentos", lugar)
   # Demais municípios do RJ: microdados da SES-RJ, agregados aqui.
@@ -402,11 +412,12 @@ internacoes_bairro <- function(municipio = NULL, anos, cid = NULL, uf = NULL) {
 #' onde_tem_bairro()
 onde_tem_bairro <- function() {
   f <- .fontes_tabnet
-  prefixo <- sub("-.*", "", f$fonte)          # "RIO", "SP", "SC" ou "SES"
+  prefixo <- sub("-.*", "", f$fonte)          # "RIO", "SP", "SC", "FOR" ou "SES"
   local <- vapply(prefixo, function(p) switch(p,
     RIO = "Rio de Janeiro (capital)",
     SP  = "S\u00e3o Paulo (capital)",
     SC  = "Santa Catarina (todos os munic\u00edpios)",
+    FOR = "Fortaleza (capital)",
     "Rio de Janeiro (todos os munic\u00edpios)"
   ), character(1), USE.NAMES = FALSE)
   funcao <- vapply(f$sistema, function(s) switch(s,

@@ -172,3 +172,10 @@ test_that("nome_coluna gera nomes legíveis", {
   expect_equal(localdatasus:::nome_coluna("Faixa Etária"), "faixa_etaria")
   expect_equal(localdatasus:::nome_coluna("Raça/Cor"), "raca_cor")
 })
+
+test_that("fonte só com capítulo recusa códigos de 3 caracteres", {
+  cfg <- localdatasus:::config_fonte("FOR-SIM")
+  expect_equal(cfg$codmun, "230440")
+  expect_true(is.na(cfg$filtro_cid3))
+  expect_error(localdatasus:::filtros_cid(cfg, list(opcoes = list()), "I21"), "LDS-09")
+})

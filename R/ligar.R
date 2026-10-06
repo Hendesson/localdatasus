@@ -138,7 +138,9 @@ ligar_bairros <- function(nome, codmun, uf, unidade = c("bairro", "distrito"),
   for (k in which(is.na(u$ligacao))) {
     cm <- cand_exato[codmun == u$codmun[k]]
     if (nrow(cm) == 0 || nchar(u$chave[k]) < 4) next
-    dist <- utils::adist(u$chave[k], cm$chave)[1, ] / nchar(u$chave[k])
+    # Sem espaços: "BOM SUCESSO" e "BONSUCESSO" diferem em 1 letra, não 2.
+    a <- gsub(" ", "", u$chave[k], fixed = TRUE)
+    dist <- utils::adist(a, gsub(" ", "", cm$chave, fixed = TRUE))[1, ] / nchar(a)
     melhor <- which(dist == min(dist))
     if (min(dist) <= distancia_max && length(melhor) == 1) {
       u$id_unidade[k] <- cm$id_unidade[melhor]

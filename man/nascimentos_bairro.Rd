@@ -24,7 +24,7 @@ Como em [obitos_bairro()], com `nascimentos` no lugar de `obitos`.
 \description{
 Conta os nascidos vivos de mães residentes por bairro (ou distrito),
 ano a ano, com população, taxa por 10 mil e coordenadas. Fontes: TabNet
-da Prefeitura do Rio e de São Paulo; nos demais municípios do RJ, os
+das Prefeituras do Rio, de São Paulo e de Fortaleza; nos demais municípios do RJ, os
 microdados da SES-RJ, localizados pelo CEP e pelo nome do bairro da mãe.
 }
 \examples{

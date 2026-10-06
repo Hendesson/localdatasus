@@ -1,3 +1,10 @@
+# localdatasus (em desenvolvimento)
+
+* Nova fonte: TabNet da Secretaria Municipal de Saúde de Fortaleza (`FOR-SIM` e `FOR-SINASC`), com óbitos e nascidos vivos por bairro de residência desde 1999. `obitos_bairro("Fortaleza", ...)` e `nascimentos_bairro("Fortaleza", ...)` passam a usá-la.
+* A ligação aproximada de nomes ignora os espaços ("Bom Sucesso" liga a "Bonsucesso").
+* Fontes que só filtram por capítulo da CID dão um erro claro (`LDS-09`) quando recebem códigos de 3 caracteres.
+* Correção: consultas a fontes estaduais sem registros no município pedido davam erro interno; agora dão `LDS-12`.
+
 # localdatasus 0.1.0
 
 Primeira versão pública.

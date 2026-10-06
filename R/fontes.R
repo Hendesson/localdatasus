@@ -31,6 +31,7 @@ URL_RIO  <- "https://tabnet.rio.rj.gov.br/cgi-bin/dh?"
 URL_SC   <- "http://200.19.223.105/cgi-bin/dh?sinan/def/"
 URL_SP   <- "https://tabnet.saude.prefeitura.sp.gov.br/cgi/deftohtm3.exe?secretarias/saude/TABNET/"
 URL_SES_RJ <- "https://sistemas.saude.rj.gov.br/tabnetbd/dhx.exe?"
+URL_FOR  <- "https://tabnet.sms.fortaleza.ce.gov.br/scripts/deftohtm.exe?"
 
 fonte_tab <- function(fonte, descricao, sistema, uf, codmun, unidade, dialeto, url_def, linha,
                       rotulo, descartar = NA, filtro_mun = NA, filtros_fixos = NA,
@@ -110,7 +111,15 @@ dividir <- function(x, i) vapply(strsplit(x, "|", fixed = TRUE), `[`, character(
             "355030", "distrito", "tabnet", paste0(URL_SP, "sinasc/nascido.def"),
             "Distrito Administ. resid\u00eancia", "nome", incremento = "NV parturientes residentes MSP"),
   fonte_tab(paste0("SP-SINAN-", names(.tab_sp)), dividir(.tab_sp, 2), "SINAN", "SP", "355030",
-            "distrito", "tabnet", paste0(URL_SP, dividir(.tab_sp, 1)), dividir(.tab_sp, 3), "nome")
+            "distrito", "tabnet", paste0(URL_SP, dividir(.tab_sp, 1)), dividir(.tab_sp, 3), "nome"),
+  # TabNet da SMS de Fortaleza: a base traz também residentes de outros
+  # municípios do CE, por isso o filtro fixo de município de residência.
+  fonte_tab("FOR-SIM", "\u00d3bitos de residentes (1999 em diante)", "SIM", "CE", "230440", "bairro",
+            "tabnet", paste0(URL_FOR, "Obitoscid.def"), "Bairro Resid.(Alfab.)", "nome",
+            filtros_fixos = "Munic. Resid-CE=230440"),
+  fonte_tab("FOR-SINASC", "Nascidos vivos de m\u00e3es residentes (1999 em diante)", "SINASC", "CE",
+            "230440", "bairro", "tabnet", paste0(URL_FOR, "nascido.def"), "Bair.Res.M\u00e3e", "nome",
+            filtros_fixos = "Munic Resid-CE M\u00e3e=230440")
 )
 .fontes_tabnet$sistema[.fontes_tabnet$fonte == "SP-SINAN-SRAG"] <- "SIVEP-Gripe"
 # Filtros de causa (CID-10) das bases de óbito: por capítulo e por
@@ -120,7 +129,9 @@ dividir <- function(x, i) vapply(strsplit(x, "|", fixed = TRUE), `[`, character(
 cid_sim <- rbind(
   c("RIO-SIM",    "Causa (Cap CID10)",                   "Causa (CID10 3C)"),
   c("SP-SIM",     "Causa(Cap CID10)",                    "Causa(CID10 3C)"),
-  c("SES-RJ-SIM", "Causa b\u00e1sica - cap\u00edtulo", "Causa b\u00e1sica - categoria")
+  c("SES-RJ-SIM", "Causa b\u00e1sica - cap\u00edtulo", "Causa b\u00e1sica - categoria"),
+  # Fortaleza só filtra por capítulo (o campo "(CID10)" traz os capítulos).
+  c("FOR-SIM",    "Causas B\u00e1sicas (CID10)",         NA)
 )
 i <- match(cid_sim[, 1], .fontes_tabnet$fonte)
 .fontes_tabnet$filtro_capitulo[i] <- cid_sim[, 2]

@@ -33,10 +33,12 @@ obitos_bairro("Rio de Janeiro", 2023, cid = c("I", "J"), por = "sexo")
 obitos_bairro("Niterói", 2022, cid = "I20-I25")                    # doenças isquêmicas
 obitos_bairro(uf = "RJ", anos = 2023)                              # todos os municípios do RJ
 obitos_bairro("São Paulo", 2023, por = "faixa etaria")             # por distrito
+obitos_bairro("Fortaleza", 2023, cid = "I")                        # TabNet da SMS de Fortaleza
 
 # Nascimentos
 nascimentos_bairro("Rio de Janeiro", 2023, por = "tipo de parto")
 nascimentos_bairro("Niterói", 2023)
+nascimentos_bairro("Fortaleza", 2023)
 
 # Agravos de notificação (SINAN)
 agravos_bairro("dengue", "Rio de Janeiro", 2024)
@@ -141,8 +143,9 @@ fontes_tabnet()
 | `SES-RJ-SIM` | estado do RJ, todos os municípios (bairro a partir de 2011) | bairro | óbitos |
 | `SC-SINAN-*` | estado de SC, todos os municípios | bairro | dengue, chikungunya, leishmaniose, leptospirose, violência, notificação individual |
 | `SP-SIM`, `SP-SINASC`, `SP-SINAN-*` | São Paulo (capital) | distrito (96) | óbitos, nascidos vivos, tuberculose, SRAG, aids, meningite, violência |
+| `FOR-SIM`, `FOR-SINASC` | Fortaleza (capital), 1999+ | bairro | óbitos (filtro só por capítulo da CID) e nascidos vivos |
 
-Levantamento de out/2026 nos TabNets das 27 UFs e das capitais. Os TabNets estaduais de MG, PE, CE, ES, PB, TO e BA vão só até o município. Nos demais não achamos TabNet público com bairro. Os TabNets de Fortaleza, Campinas, RR e MS estavam fora do ar ou bloqueados.
+Levantamento de out/2026 nos TabNets das 27 UFs e das capitais. Os TabNets estaduais de MG, PE, CE, ES, PB, TO e BA vão só até o município. Nos demais não achamos TabNet público com bairro. O TabNet de Campinas tabula por distrito de saúde e área de abrangência dos centros de saúde, e não por bairro; os de RR e MS estavam bloqueados.
 
 Os TabNets de internações e procedimentos da Prefeitura de SP **não entram**: lá o distrito é o do estabelecimento, não o da residência.
 
@@ -248,6 +251,7 @@ Nos TabNets, a parte das contagens ligadas a um bairro ou distrito do IBGE foi:
 | SES-RJ-SIM | 2023 | 86% (os loteamentos da Baixada não são bairros do IBGE) |
 | SC-SINAN-DENGUE (Joinville e Florianópolis) | 2024 | 99,3% |
 | SP-SIM, SP-SINASC | 2023 | 98–100% (o resto é "Ignorado") |
+| FOR-SIM, FOR-SINASC | 2023 | 95% e 90% (o resto é "Ignorados" na fonte ou nomes sem bairro no IBGE) |
 
 No Acre (SIH 2023), só 9% receberam bairro: os hospitais de Rio Branco registram CEPs dos Correios, e as cidades do interior têm CEP único. **Confira sempre `attr(x, "cobertura")`.**
 

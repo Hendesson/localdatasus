@@ -33,8 +33,9 @@ Um `data.frame` com `ano`, `codigo_municipio`, `municipio`,
 Conta os óbitos de residentes por bairro (ou distrito), ano a ano, com
 população, taxa por 10 mil habitantes e coordenadas de cada bairro. A
 fonte é escolhida sozinha pelo lugar: TabNet da Prefeitura do Rio
-(2006+), da Prefeitura de São Paulo (distritos, 2006+) ou da SES-RJ
-(demais municípios do RJ, bairro a partir de 2011). Veja [onde_tem_bairro()].
+(2006+), da Prefeitura de São Paulo (distritos, 2006+), da Prefeitura de
+Fortaleza (1999+, só capítulos da CID) ou da SES-RJ (demais municípios
+do RJ, bairro a partir de 2011). Veja [onde_tem_bairro()].
 }
 \examples{
 \dontrun{
