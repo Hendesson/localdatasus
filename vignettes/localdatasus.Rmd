@@ -1,0 +1,73 @@
+---
+title: "Primeiros passos com o localdatasus"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Primeiros passos com o localdatasus}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+# Os exemplos baixam dados da internet; por isso não são executados aqui.
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+O **localdatasus** traz dados de saúde do SUS por **bairro**, com população do Censo 2022, taxa por 10 mil habitantes, coordenadas e mapas. Todas as funções seguem a mesma ideia: você diz **o quê**, **onde** e **quando**, e o pacote escolhe a fonte.
+
+## O que existe e onde
+
+Nem todo lugar tem dados por bairro. Comece perguntando ao pacote:
+
+```{r, eval = TRUE}
+library(localdatasus)
+head(onde_tem_bairro()[, c("dado", "local", "funcao")])
+```
+
+## Óbitos, nascimentos e agravos
+
+```{r}
+# Óbitos por doenças do aparelho circulatório (capítulo IX da CID-10)
+circ <- obitos_bairro("Rio de Janeiro", 2023, cid = "I")
+
+# Abertura por sexo
+obitos_bairro("Rio de Janeiro", 2023, cid = c("I", "J"), por = "sexo")
+
+nascimentos_bairro("Fortaleza", 2023)
+agravos_bairro("dengue", "Recife", 2024, por = "classificacao")
+```
+
+Cada linha da tabela é um bairro, com o nome oficial do IBGE (`bairro`), o nome na fonte (`bairro_no_site`), a contagem, a `populacao`, a `taxa_por_10mil`, as coordenadas (`lat`, `lon`) e a etapa de ligação ao IBGE (`ligacao`).
+
+## Internações, em qualquer estado
+
+As internações chegam ao bairro pelo CEP do paciente, cruzado com o Cadastro Nacional de Endereços para Fins Estatísticos (CNEFE) do Censo 2022:
+
+```{r}
+pe <- internacoes_bairro("Recife", 2023, cid = "I", uf = "PE")
+attr(pe, "cobertura")   # quantas ganharam bairro, e por que as outras não
+```
+
+## Outras bases
+
+```{r}
+atendimentos_bairro("Curitiba", 2025, meses = 1:3, cid = "J")   # e-Saúde de Curitiba
+samu_bairro("Recife", 2024, tipo = "causas externas")             # local da ocorrência
+estabelecimentos_bairro("Recife", tipo = "unidade basica")        # CNES, qualquer município
+```
+
+## Mapas
+
+```{r}
+mapa_bairro(circ)        # mapa estático (ggplot2)
+mapa_interativo(circ)    # mapa interativo (leaflet)
+```
+
+## Quando algo dá errado
+
+Cada erro traz um código. A função `ajuda()` explica a causa e sugere a solução:
+
+```{r, eval = TRUE}
+ajuda("LDS-05")
+```
+
+Tutoriais completos: <https://hendesson.github.io/tutoriais.html>.

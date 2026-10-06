@@ -33,7 +33,7 @@ pasta_cache <- function() {
 baixar <- function(url, destino) {
   if (file.exists(destino)) return(destino)
   antigo <- options(timeout = max(3600, getOption("timeout")))
-  on.exit(options(antigo))
+  on.exit(options(antigo), add = TRUE)
   parcial <- paste0(destino, ".parcial")
   utils::download.file(url, parcial, mode = "wb", quiet = TRUE)
   file.rename(parcial, destino)
@@ -67,10 +67,8 @@ foi_ligado <- function(ligacao) {
 #'
 #' @return Invisivelmente, o caminho da pasta de cache.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' limpar_cache()
-#' }
 limpar_cache <- function() {
   pasta <- pasta_cache()
   unlink(list.files(pasta, full.names = TRUE), recursive = TRUE)

@@ -13,9 +13,10 @@ Cada bairro é ligado ao bairro oficial do IBGE, com população do Censo 2022 e
 
 ```r
 # install.packages("remotes")
-remotes::install_github("rfsaldanha/microdatasus")
 remotes::install_github("Hendesson/localdatasus")
 ```
+
+O pacote [microdatasus](https://CRAN.R-project.org/package=microdatasus), usado para os microdados do DATASUS, é instalado junto, a partir do CRAN.
 
 ## Uso rápido
 

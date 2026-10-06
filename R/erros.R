@@ -118,7 +118,8 @@ doc_erros <- function() {
 #' `options(localdatasus.detalhes = TRUE)`.
 #'
 #' @param codigo Código do erro, como `"LDS-03"`, `"03"` ou `3`.
-#' @return Invisivelmente, a linha da tabela de erros (ou a tabela toda).
+#' @return Um objeto da classe `localdatasus_ajuda`, impresso na tela:
+#'   a explicação do código (ou a lista de todos os códigos).
 #' @eval doc_erros()
 #' @export
 #' @examples
@@ -126,22 +127,29 @@ doc_erros <- function() {
 #' ajuda("LDS-03")
 #' ajuda(3)
 ajuda <- function(codigo = NULL) {
-  if (is.null(codigo)) {
-    cat("C\u00f3digos de erro e aviso do localdatasus (use ajuda(\"LDS-xx\") para detalhes):\n\n")
-    for (i in seq_len(nrow(.erros))) cat(" ", .erros$codigo[i], " ", .erros$titulo[i], "\n", sep = "")
-    return(invisible(.erros))
-  }
+  if (is.null(codigo)) return(structure(list(lista = .erros), class = "localdatasus_ajuda"))
   num <- suppressWarnings(as.integer(gsub("\\D", "", as.character(codigo))))
   cod <- sprintf("LDS-%02d", num)
   i <- match(cod, .erros$codigo)
   if (is.na(i)) {
-    cat("C\u00f3digo desconhecido: ", codigo, ". Veja a lista com ajuda().\n", sep = "")
+    message("C\u00f3digo desconhecido: ", codigo, ". Veja a lista com ajuda().")
     return(invisible(NULL))
   }
+  structure(list(erro = .erros[i, ]), class = "localdatasus_ajuda")
+}
+
+#' @export
+print.localdatasus_ajuda <- function(x, ...) {
+  if (!is.null(x$lista)) {
+    cat("C\u00f3digos de erro e aviso do localdatasus (use ajuda(\"LDS-xx\") para detalhes):\n\n")
+    for (i in seq_len(nrow(x$lista))) cat(" ", x$lista$codigo[i], " ", x$lista$titulo[i], "\n", sep = "")
+    return(invisible(x))
+  }
+  e <- x$erro
   largura <- min(getOption("width", 80), 80)
-  quebra <- function(x) paste(strwrap(x, largura - 4, prefix = "    "), collapse = "\n")
-  cat("\n", .erros$codigo[i], " \u2014 ", .erros$titulo[i], "\n\n",
-      "  O que aconteceu:\n", quebra(.erros$causa[i]), "\n\n",
-      "  Como resolver:\n", quebra(.erros$solucao[i]), "\n\n", sep = "")
-  invisible(.erros[i, ])
+  quebra <- function(s) paste(strwrap(s, largura - 4, prefix = "    "), collapse = "\n")
+  cat("\n", e$codigo, " \u2014 ", e$titulo, "\n\n",
+      "  O que aconteceu:\n", quebra(e$causa), "\n\n",
+      "  Como resolver:\n", quebra(e$solucao), "\n\n", sep = "")
+  invisible(x)
 }

@@ -68,12 +68,10 @@ baixar_samu <- function(anos) {
 #'   `"desfecho"`.
 #' @return Como em [obitos_bairro()], com `chamados` no lugar de `obitos`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' samu_bairro("Recife", 2024)
 #' samu_bairro("Recife", 2024, tipo = "causas externas", por = "subtipo")
 #' samu_bairro("Olinda", 2023:2024)
-#' }
 samu_bairro <- function(municipio = "Recife", anos, tipo = NULL, por = NULL) {
   lugar <- achar_lugar(municipio, "PE")
   d <- baixar_samu(anos)

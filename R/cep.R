@@ -38,11 +38,9 @@ URL_CNEFE_MUN <- paste0(
 #'       coordenadas dos endereços do bairro) e `n_enderecos`.}
 #'   }
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' tab <- cep_bairro("AC")
 #' head(tab$ceps)
-#' }
 cep_bairro <- function(uf, manter_cnefe = FALSE) {
   cod <- codigo_uf(uf)
   uf  <- toupper(uf)

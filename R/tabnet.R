@@ -217,11 +217,9 @@ tn_consultar <- function(form, linha, coluna, incremento, periodos, filtros) {
 #'   opções dele.
 #' @return Um vetor de rótulos.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' tabnet_opcoes("RIO-SIM", "colunas")
 #' tabnet_opcoes("RIO-SIM", "filtros", filtro = "Sexo")
-#' }
 tabnet_opcoes <- function(fonte, tipo = c("colunas", "filtros", "incrementos", "anos"),
                           filtro = NULL) {
   tipo <- match.arg(tipo)
@@ -320,8 +318,7 @@ tn_consultar_cache <- function(cfg, form, ano, coluna, incremento, filtros) {
 #'   (`ligacao`, `id_unidade`, `nome_ibge`, `cd_ibge`, `lat`, `lon`,
 #'   `populacao`) e `taxa_10mil` (por ano, sobre a população de 2022).
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Óbitos por doenças do aparelho circulatório, por bairro do Rio
 #' tabnet_bairro("RIO-SIM", 2022:2023, coluna = "Faixa Etária",
 #'               filtros = list("Causa (Cap CID10)" = "IX"))
@@ -329,7 +326,6 @@ tn_consultar_cache <- function(cfg, form, ano, coluna, incremento, filtros) {
 #' tabnet_bairro("SC-SINAN-DENGUE", 2024, municipios = "420910")
 #' # Óbitos por distrito da cidade de São Paulo
 #' tabnet_bairro("SP-SIM", 2023, coluna = "Sexo")
-#' }
 tabnet_bairro <- function(fonte, anos, coluna = NULL, filtros = list(), incremento = NULL,
                           municipios = NULL, ligar = TRUE) {
   cfg  <- config_fonte(fonte)

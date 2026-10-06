@@ -60,7 +60,7 @@ quais municípios têm registros no ano, depois consulta cada um. Use
 `municipios` para limitar.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Óbitos por doenças do aparelho circulatório, por bairro do Rio
 tabnet_bairro("RIO-SIM", 2022:2023, coluna = "Faixa Etária",
               filtros = list("Causa (Cap CID10)" = "IX"))
@@ -68,5 +68,5 @@ tabnet_bairro("RIO-SIM", 2022:2023, coluna = "Faixa Etária",
 tabnet_bairro("SC-SINAN-DENGUE", 2024, municipios = "420910")
 # Óbitos por distrito da cidade de São Paulo
 tabnet_bairro("SP-SIM", 2023, coluna = "Sexo")
-}
+\dontshow{\}) # examplesIf}
 }

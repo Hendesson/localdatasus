@@ -19,11 +19,11 @@ test_that("todo código usado no pacote está documentado em ajuda()", {
 })
 
 test_that("ajuda() aceita o código de vários jeitos", {
-  expect_output(localdatasus::ajuda("LDS-03"), "nome repetido")
-  expect_output(localdatasus::ajuda("03"), "nome repetido")
-  expect_output(localdatasus::ajuda(3), "Como resolver")
-  expect_output(localdatasus::ajuda(), "LDS-23")
-  expect_output(localdatasus::ajuda("LDS-99"), "desconhecido")
+  expect_output(print(localdatasus::ajuda("LDS-03")), "nome repetido")
+  expect_output(print(localdatasus::ajuda("03")), "nome repetido")
+  expect_output(print(localdatasus::ajuda(3)), "Como resolver")
+  expect_output(print(localdatasus::ajuda()), "LDS-23")
+  expect_message(localdatasus::ajuda("LDS-99"), "desconhecido")
 })
 
 test_that("cid inválida dá erro LDS-08", {

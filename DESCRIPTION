@@ -4,18 +4,23 @@ Title: Dados de Saúde do SUS por Bairro (Escala Local)
 Version: 0.1.0
 Authors@R:
     person("Hendesson", "Alves", role = c("aut", "cre"),
-           email = "hendesson124@gmail.com")
-Description: Dados de saúde do SUS por bairro, com população, taxas por
-    10 mil habitantes, coordenadas e mapas. Funções simples buscam óbitos,
-    nascimentos, agravos de notificação e internações por bairro, escolhendo
-    sozinhas a fonte: microdados com CEP do paciente (SIH e APACs do SIA,
-    via microdatasus; SINASC da Secretaria de Saúde do Rio de Janeiro) ou
-    os TabNets regionais que tabulam por bairro ou distrito (Rio de
-    Janeiro, São Paulo e Santa Catarina). CEPs e nomes de bairro são
-    ligados aos bairros oficiais do IBGE pelo Cadastro Nacional de
-    Endereços para Fins Estatísticos (CNEFE) e pelos setores do Censo 2022,
-    com regras de qualidade para CEPs genéricos. Inclui mapas estáticos e
-    interativos e mensagens de erro com código e sugestão de solução.
+           email = "hendesson124@gmail.com",
+           comment = c(ORCID = "0009-0009-0342-9201"))
+Description: Dados de saúde do Sistema Único de Saúde (SUS) do Brasil por
+    bairro, com população, taxas por 10 mil habitantes, coordenadas e
+    mapas. Funções simples, em português, buscam óbitos, nascimentos,
+    agravos de notificação, internações, atendimentos, chamados do SAMU e
+    estabelecimentos de saúde por bairro, escolhendo sozinhas a fonte:
+    microdados com o código de endereçamento postal (CEP) do paciente,
+    obtidos pelo pacote 'microdatasus' de Saldanha, Bastos e Barcellos (2019)
+    <doi:10.1590/0102-311x00032419>; arquivos e dados abertos de
+    secretarias de saúde; e tabuladores 'TabNet' regionais que tabulam por
+    bairro ou distrito. CEPs e nomes de bairro são ligados aos bairros
+    oficiais do Instituto Brasileiro de Geografia e Estatística (IBGE) pelo
+    Cadastro Nacional de Endereços para Fins Estatísticos (CNEFE) e pelos
+    setores do Censo 2022, com regras de qualidade para CEPs genéricos.
+    Inclui mapas estáticos e interativos e mensagens de erro com código e
+    sugestão de solução.
 URL: https://github.com/Hendesson/localdatasus, https://hendesson.github.io/projetos/localdatasus/
 BugReports: https://github.com/Hendesson/localdatasus/issues
 License: MIT + file LICENSE
@@ -31,12 +36,13 @@ Imports:
     stats,
     tools,
     utils
-Remotes:
-    rfsaldanha/microdatasus
 Suggests:
     ggplot2,
+    knitr,
     leaflet,
+    rmarkdown,
     sf,
     testthat (>= 3.0.0)
+VignetteBuilder: knitr
 Config/testthat/edition: 3
 RoxygenNote: 7.3.2

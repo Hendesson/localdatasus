@@ -115,11 +115,9 @@ baixar_curitiba <- function(meses) {
 #' @return Como em [obitos_bairro()], com `atendimentos` no lugar de
 #'   `obitos`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' atendimentos_bairro("Curitiba", 2025, meses = 1:3, cid = "J")
 #' atendimentos_bairro("Curitiba", 2025, meses = 6, por = "tipo de unidade")
-#' }
 atendimentos_bairro <- function(municipio = "Curitiba", anos, meses = 1:12, cid = NULL, por = NULL) {
   lugar <- achar_lugar(municipio, NULL)
   if (!identical(lugar$codmun, COD_CURITIBA)) sem_fonte("atendimentos m\u00e9dicos", lugar)

@@ -8,6 +8,7 @@ test_that("estabelecimentos_bairro avisa quando o tipo n\u00e3o existe", {
   testthat::local_mocked_bindings(
     cnes_aberto = function() data.table::copy(falso),
     tipos_unidade_cnes = function() c("5" = "HOSPITAL GERAL", "2" = "CENTRO DE SAUDE/UNIDADE BASICA"),
+    achar_lugar = function(municipio, uf) list(codmun = "330455", nome = "Rio de Janeiro", uf = "RJ"),
     .package = "localdatasus")
   expect_error(estabelecimentos_bairro("Rio de Janeiro", tipo = "farmacia"), "LDS-10")
   expect_error(estabelecimentos_bairro("Rio de Janeiro", por = "sexo"), "LDS-10")

@@ -30,9 +30,9 @@ municípios. Fonte: portal de dados abertos da Prefeitura do Recife,
 2016 em diante. As solicitações duplicadas são descartadas.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 samu_bairro("Recife", 2024)
 samu_bairro("Recife", 2024, tipo = "causas externas", por = "subtipo")
 samu_bairro("Olinda", 2023:2024)
-}
+\dontshow{\}) # examplesIf}
 }

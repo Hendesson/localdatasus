@@ -44,8 +44,8 @@ primeira consulta de um ano baixa quatro arquivos. Os meses ficam no
 cache, e as consultas seguintes são rápidas.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 atendimentos_bairro("Curitiba", 2025, meses = 1:3, cid = "J")
 atendimentos_bairro("Curitiba", 2025, meses = 6, por = "tipo de unidade")
-}
+\dontshow{\}) # examplesIf}
 }

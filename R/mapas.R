@@ -129,14 +129,12 @@ contornos <- function(p) {
 #'   `"Blues"`, `"YlOrRd"`.
 #' @return Um gráfico `ggplot2`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' x <- obitos_bairro("Rio de Janeiro", 2023, cid = "I")
 #' mapa_bairro(x)
 #' mapa_bairro(x, valor = "obitos", titulo = "Óbitos por doenças circulatórias, 2023")
 #' mapa_bairro(obitos_bairro("Rio de Janeiro", 2023, por = "sexo"))   # um painel por sexo
 #' ggplot2::ggsave("mapa.png", width = 8, height = 6, dpi = 300)
-#' }
 mapa_bairro <- function(dados, valor = NULL, titulo = NULL, cores = "Reds") {
   precisa(c("sf", "ggplot2"))
   p <- preparar_mapa(dados, valor)
@@ -192,11 +190,9 @@ mapa_bairro <- function(dados, valor = NULL, titulo = NULL, cores = "Reds") {
 #' @return Um mapa `leaflet` (aparece no Viewer do RStudio). Para salvar
 #'   como página web: `htmlwidgets::saveWidget(mapa, "mapa.html")`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' x <- agravos_bairro("dengue", "Rio de Janeiro", 2024)
 #' mapa_interativo(x)
-#' }
 mapa_interativo <- function(dados, valor = NULL, cores = "Reds") {
   precisa(c("sf", "leaflet"))
   p <- preparar_mapa(dados, valor)

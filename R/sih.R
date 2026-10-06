@@ -49,12 +49,10 @@
 #'   `ano`, `grupo`, `internacoes`, `obitos_hosp`, `populacao` (só bairros
 #'   oficiais), `taxa_10mil` e `suprimido`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Internações por doenças circulatórias e respiratórias, Acre, 2023
 #' x <- sih_bairro("AC", 2023, cid = c("I", "J"))
 #' attr(x, "cobertura")
-#' }
 sih_bairro <- function(uf, ano_inicio, ano_fim = ano_inicio, cid = NULL,
                        nivel = c("bairro", "internacao"), minimo = 0,
                        meses_extras = 6, pct_min = 0.6, limite_excesso = 20) {

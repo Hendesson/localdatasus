@@ -61,8 +61,8 @@ diagnóstico da qualidade do CEP (`situacao_cep`).
 }
 
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 minha_tabela <- data.frame(id = 1:3, cep = c("20031170", "22041001", "24020005"))
 adicionar_bairro(minha_tabela, "RJ", col_cep = "cep")
-}
+\dontshow{\}) # examplesIf}
 }

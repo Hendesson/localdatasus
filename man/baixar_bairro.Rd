@@ -61,9 +61,9 @@ pseudonimizado (`AP_CNSPCN`) convertido em texto legível, que permite
 seguir o mesmo paciente entre meses.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 quimio <- baixar_bairro("SIA-AQ", "RJ", 2024, mes_inicio = 1, mes_fim = 3)
 internacoes <- baixar_bairro("SIH-RD", "RJ", 2023)
 nascimentos <- baixar_bairro("SINASC-RJ", "RJ", 2023)
-}
+\dontshow{\}) # examplesIf}
 }

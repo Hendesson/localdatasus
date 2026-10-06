@@ -42,8 +42,8 @@ cadastro. Mede a oferta de serviços no bairro, não onde moram os
 pacientes.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 estabelecimentos_bairro("Recife", tipo = "unidade basica")
 estabelecimentos_bairro("Belo Horizonte", por = "tipo", so_sus = TRUE)
-}
+\dontshow{\}) # examplesIf}
 }

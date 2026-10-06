@@ -230,14 +230,12 @@ arrumar_tabela <- function(d, nome_por, contagem) {
 #'   `taxa_por_10mil`, `lat`, `lon`, `codigo_ibge`, `ligacao` (como o nome
 #'   foi ligado ao IBGE) e `fonte`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' obitos_bairro("Rio de Janeiro", 2023, cid = "I")
 #' obitos_bairro("Rio de Janeiro", 2019:2023, cid = c("I", "J"), por = "sexo")
 #' obitos_bairro("Niterói", 2022, cid = "I20-I25")
 #' obitos_bairro(uf = "RJ", anos = 2023)
 #' obitos_bairro("São Paulo", 2023, por = "faixa etaria")
-#' }
 obitos_bairro <- function(municipio = NULL, anos, cid = NULL, por = NULL, uf = NULL) {
   lugar <- achar_lugar(municipio, uf)
   if (identical(lugar$codmun, COD_RIO)) {
@@ -267,11 +265,9 @@ obitos_bairro <- function(municipio = NULL, anos, cid = NULL, por = NULL, uf = N
 #'   `"idade da mae"`, `"consultas"`...
 #' @return Como em [obitos_bairro()], com `nascimentos` no lugar de `obitos`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' nascimentos_bairro("Rio de Janeiro", 2023)
 #' nascimentos_bairro("Niterói", 2022:2023, por = "tipo de parto")
-#' }
 nascimentos_bairro <- function(municipio = NULL, anos, por = NULL, uf = NULL) {
   lugar <- achar_lugar(municipio, uf)
   if (identical(lugar$codmun, COD_RIO)) {
@@ -342,12 +338,10 @@ agregar_registros <- function(d, por, contagem, fonte) {
 #' @param por Variável para abrir as contagens, por exemplo `"sexo"`.
 #' @return Como em [obitos_bairro()], com `casos` no lugar de `obitos`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' agravos_bairro("dengue", "Rio de Janeiro", 2024)
 #' agravos_bairro("tuberculose", "São Paulo", 2022:2024)
 #' agravos_bairro("dengue", "Joinville", 2024, por = "sexo")
-#' }
 agravos_bairro <- function(agravo, municipio = NULL, anos, por = NULL, uf = NULL) {
   lugar <- achar_lugar(municipio, uf)
   if (identical(lugar$codmun, COD_RIO)) {
@@ -395,10 +389,8 @@ agravos_bairro <- function(agravo, municipio = NULL, anos, por = NULL, uf = NULL
 #' @return Um `data.frame` por bairro e ano com `internacoes`,
 #'   `obitos_hosp`, `populacao`, `taxa_10mil` e coordenadas.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' internacoes_bairro("Rio de Janeiro", 2023, cid = c("I", "J"), uf = "RJ")
-#' }
 internacoes_bairro <- function(municipio = NULL, anos, cid = NULL, uf = NULL) {
   lugar <- achar_lugar(municipio, uf)
   if (!is.null(cid)) cid <- expandir_cid(toupper(cid))

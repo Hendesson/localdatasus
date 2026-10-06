@@ -26,7 +26,7 @@ atendimento — por exemplo, para medir a distância entre a residência
 Os resultados ficam em cache; só CNES novos são consultados.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 cnes_coordenadas(c("2269880", "2270234"))
-}
+\dontshow{\}) # examplesIf}
 }

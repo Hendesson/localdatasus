@@ -37,11 +37,11 @@ temas com `+`, e salvar com `ggplot2::ggsave()`.
 Precisa dos pacotes `sf` e `ggplot2`.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 x <- obitos_bairro("Rio de Janeiro", 2023, cid = "I")
 mapa_bairro(x)
 mapa_bairro(x, valor = "obitos", titulo = "Óbitos por doenças circulatórias, 2023")
 mapa_bairro(obitos_bairro("Rio de Janeiro", 2023, por = "sexo"))   # um painel por sexo
 ggplot2::ggsave("mapa.png", width = 8, height = 6, dpi = 300)
-}
+\dontshow{\}) # examplesIf}
 }

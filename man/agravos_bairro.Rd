@@ -34,9 +34,9 @@ Prefeitura (a dengue traz os casos notificados; use
 [onde_tem_bairro()].
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 agravos_bairro("dengue", "Rio de Janeiro", 2024)
 agravos_bairro("tuberculose", "São Paulo", 2022:2024)
 agravos_bairro("dengue", "Joinville", 2024, por = "sexo")
-}
+\dontshow{\}) # examplesIf}
 }

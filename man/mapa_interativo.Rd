@@ -31,8 +31,8 @@ categorias, as contagens são somadas (filtre antes, se preferir).
 Precisa dos pacotes `sf` e `leaflet`.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 x <- agravos_bairro("dengue", "Rio de Janeiro", 2024)
 mapa_interativo(x)
-}
+\dontshow{\}) # examplesIf}
 }

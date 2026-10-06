@@ -27,8 +27,8 @@ bairro (e por outras colunas, se pedido) e junta a população do Censo
 Registros sem bairro ficam numa linha `"(sem bairro)"` por município.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 quimio <- baixar_bairro("SIA-AQ", "RJ", 2024)
 agregar_bairro(quimio, por = "ano_ref", contar_distintos = "id_paciente")
-}
+\dontshow{\}) # examplesIf}
 }

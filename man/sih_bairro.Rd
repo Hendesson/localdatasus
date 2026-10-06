@@ -79,9 +79,9 @@ faturadas com atraso.
 }
 
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Internações por doenças circulatórias e respiratórias, Acre, 2023
 x <- sih_bairro("AC", 2023, cid = c("I", "J"))
 attr(x, "cobertura")
-}
+\dontshow{\}) # examplesIf}
 }

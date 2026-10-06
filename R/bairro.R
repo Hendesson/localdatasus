@@ -35,11 +35,9 @@
 #' @inheritParams sih_bairro
 #' @return `dados` com as colunas acima acrescentadas.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' minha_tabela <- data.frame(id = 1:3, cep = c("20031170", "22041001", "24020005"))
 #' adicionar_bairro(minha_tabela, "RJ", col_cep = "cep")
-#' }
 adicionar_bairro <- function(dados, uf, col_cep = "CEP", col_mun = NULL, col_id = NULL,
                              pct_min = 0.6, limite_excesso = 20) {
   cod <- codigo_uf(uf)
@@ -112,12 +110,10 @@ adicionar_bairro <- function(dados, uf, col_cep = "CEP", col_mun = NULL, col_id 
 #' @return Um `data.frame`, um registro por linha; o atributo `"cobertura"`
 #'   resume `situacao_cep`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' quimio <- baixar_bairro("SIA-AQ", "RJ", 2024, mes_inicio = 1, mes_fim = 3)
 #' internacoes <- baixar_bairro("SIH-RD", "RJ", 2023)
 #' nascimentos <- baixar_bairro("SINASC-RJ", "RJ", 2023)
-#' }
 baixar_bairro <- function(sistema, uf, ano_inicio, ano_fim = ano_inicio,
                           mes_inicio = 1, mes_fim = 12, vars = NULL,
                           pct_min = 0.6, limite_excesso = 20) {
@@ -254,11 +250,9 @@ completar_pelo_nome <- function(res, col_bairro, uf) {
 #' @return Um `data.frame` com o bairro, as colunas de `por`, `n`,
 #'   `populacao` e `taxa_10mil`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' quimio <- baixar_bairro("SIA-AQ", "RJ", 2024)
 #' agregar_bairro(quimio, por = "ano_ref", contar_distintos = "id_paciente")
-#' }
 agregar_bairro <- function(dados, por = NULL, contar_distintos = NULL) {
   necessarias <- c("codmun_paciente", "id_bairro", "bairro", "fonte_bairro",
                    "cd_bairro_ibge", "lat_bairro", "lon_bairro")

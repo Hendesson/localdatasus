@@ -49,7 +49,7 @@ sem bairros oficiais, as localidades do CNEFE (ver [cep_bairro()]). Com
 `codmun` (ver [distritos_censo()]).
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ligar_bairros(c("Jd. América", "TIJUCA", "Ignorado"), "330455", "RJ")
-}
+\dontshow{\}) # examplesIf}
 }

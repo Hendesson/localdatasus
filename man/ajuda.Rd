@@ -10,7 +10,8 @@ ajuda(codigo = NULL)
 \item{codigo}{Código do erro, como `"LDS-03"`, `"03"` ou `3`.}
 }
 \value{
-Invisivelmente, a linha da tabela de erros (ou a tabela toda).
+Um objeto da classe `localdatasus_ajuda`, impresso na tela:
+  a explicação do código (ou a lista de todos os códigos).
 }
 \description{
 Todo erro ou aviso do localdatasus vem com um código, por exemplo

@@ -9,6 +9,7 @@ test_that("samu_bairro filtra o munic\u00edpio, descarta duplicadas e valida o p
   capturado <- NULL
   testthat::local_mocked_bindings(
     baixar_samu = function(anos) data.table::copy(falso),
+    achar_lugar = function(municipio, uf) list(codmun = "261160", nome = "Recife", uf = "PE"),
     ligar_bairros = function(nome, codmun, uf, ...) {
       capturado <<- nome
       data.frame(nome = nome, codmun = codmun, ligacao = "n\u00e3o encontrado", id_unidade = NA_character_,

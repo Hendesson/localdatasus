@@ -85,10 +85,8 @@ unidades_ibge <- function(uf, unidade = c("bairro", "distrito"), codmuns = NULL)
 #'   `fonte_unidade`, `cd_ibge`, `lat`, `lon` e `populacao` (só em unidades
 #'   oficiais do IBGE).
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' ligar_bairros(c("Jd. América", "TIJUCA", "Ignorado"), "330455", "RJ")
-#' }
 ligar_bairros <- function(nome, codmun, uf, unidade = c("bairro", "distrito"),
                           distancia_max = 0.15) {
   unidade <- match.arg(unidade)

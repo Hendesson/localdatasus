@@ -29,7 +29,7 @@ setores_censo <- function() {
   url <- url_setores()
   zip <- baixar(url, file.path(pasta_cache(), basename(url)))
   csv <- utils::unzip(zip, exdir = tempdir())
-  on.exit(unlink(csv))
+  on.exit(unlink(csv), add = TRUE)
 
   s <- data.table::fread(
     csv, sep = ";", encoding = "Latin-1", colClasses = "character",
@@ -60,10 +60,8 @@ setores_censo <- function() {
 #'   `cd_bairro_ibge`, `bairro`, `populacao` e `pop_em_favela` (pessoas em
 #'   setores de favelas e comunidades urbanas).
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' pop <- populacao_bairro("RJ")
-#' }
 populacao_bairro <- function(uf) {
   cod <- codigo_uf(uf)
   s <- setores_censo()[CD_UF == cod & !is.na(CD_BAIRRO)]
@@ -86,10 +84,8 @@ populacao_bairro <- function(uf) {
 #' @return Um `data.frame` com `codmun`, `cd_distrito_ibge`, `distrito`,
 #'   `populacao`, `lat_distrito` e `lon_distrito`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' distritos_censo("355030")   # cidade de São Paulo
-#' }
 distritos_censo <- function(codmun) {
   mun <- substr(as.character(codmun), 1, 6)
   if (length(mun) != 1) erro("LDS-02", "Passe UM munic\u00edpio.")
@@ -116,7 +112,7 @@ coordenadas_distritos <- function(cd_mun7) {
   message("Baixando o CNEFE 2022 do munic\u00edpio ", cd_mun7, " (s\u00f3 na primeira vez)...")
   zip <- baixar(paste0(pasta, nome[1]), file.path(pasta_cache(), nome[1]))
   csv <- utils::unzip(zip, exdir = tempdir())
-  on.exit(unlink(c(csv, zip)))
+  on.exit(unlink(c(csv, zip)), add = TRUE)
   end <- data.table::fread(csv, sep = ";", select = c("COD_SETOR", "LATITUDE", "LONGITUDE"),
                            colClasses = list(character = "COD_SETOR"), showProgress = FALSE)
   # Distrito = 9 primeiros dígitos do setor (UF + município + distrito).

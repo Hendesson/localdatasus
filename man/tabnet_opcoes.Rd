@@ -28,8 +28,8 @@ ir na coluna, os filtros, as opções de um filtro, as medidas
 ("incrementos") e os anos disponíveis.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tabnet_opcoes("RIO-SIM", "colunas")
 tabnet_opcoes("RIO-SIM", "filtros", filtro = "Sexo")
-}
+\dontshow{\}) # examplesIf}
 }

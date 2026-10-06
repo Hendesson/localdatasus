@@ -39,8 +39,8 @@ guarda só a tabela resultante no cache; as próximas chamadas são
 instantâneas.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tab <- cep_bairro("AC")
 head(tab$ceps)
-}
+\dontshow{\}) # examplesIf}
 }

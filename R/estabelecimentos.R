@@ -59,11 +59,9 @@ cnes_aberto <- function() {
 #'   habitantes. `attr(x, "registros")` traz cada estabelecimento, com
 #'   nome, tipo, CEP, coordenadas e bairro.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' estabelecimentos_bairro("Recife", tipo = "unidade basica")
 #' estabelecimentos_bairro("Belo Horizonte", por = "tipo", so_sus = TRUE)
-#' }
 estabelecimentos_bairro <- function(municipio = NULL, uf = NULL, tipo = NULL, so_sus = FALSE,
                                     por = NULL) {
   lugar <- achar_lugar(municipio, uf)

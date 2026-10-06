@@ -27,7 +27,7 @@ pela data de internação, a partir do CEP do paciente. Atalho para
 [sih_bairro()] com a mesma sintaxe das outras funções simples.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 internacoes_bairro("Rio de Janeiro", 2023, cid = c("I", "J"), uf = "RJ")
-}
+\dontshow{\}) # examplesIf}
 }

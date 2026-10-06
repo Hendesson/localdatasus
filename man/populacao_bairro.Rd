@@ -20,7 +20,7 @@ oficial do IBGE. Só municípios com bairros oficialmente delimitados
 (895 no Brasil) aparecem.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 pop <- populacao_bairro("RJ")
-}
+\dontshow{\}) # examplesIf}
 }

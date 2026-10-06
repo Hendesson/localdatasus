@@ -28,8 +28,8 @@ das Prefeituras do Rio, de São Paulo e de Fortaleza; nos demais municípios do 
 microdados da SES-RJ, localizados pelo CEP e pelo nome do bairro da mãe.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 nascimentos_bairro("Rio de Janeiro", 2023)
 nascimentos_bairro("Niterói", 2022:2023, por = "tipo de parto")
-}
+\dontshow{\}) # examplesIf}
 }

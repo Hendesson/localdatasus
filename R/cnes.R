@@ -19,10 +19,8 @@ URL_API_CNES <- "https://apidadosabertos.saude.gov.br/cnes/estabelecimentos/"
 #'   caem fora do Brasil viram `NA`. Atenção: o cadastro tem erros (ex.:
 #'   hospitais com coordenadas em outro município); confira `codmun`.
 #' @export
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' cnes_coordenadas(c("2269880", "2270234"))
-#' }
 cnes_coordenadas <- function(cnes) {
   cnes <- unique(sprintf("%07d", as.integer(gsub("\\D", "", cnes))))
   arq <- file.path(pasta_cache(), "cnes_coordenadas.rds")

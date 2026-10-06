@@ -42,7 +42,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Hendesson Alves \email{hendesson124@gmail.com}
+\strong{Maintainer}: Hendesson Alves \email{hendesson124@gmail.com} (\href{https://orcid.org/0009-0009-0342-9201}{ORCID})
 
 }
 \keyword{internal}

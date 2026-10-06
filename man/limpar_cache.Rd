@@ -15,7 +15,7 @@ processadas, para não refazer o trabalho. Use esta função para liberar
 espaço ou forçar um novo download.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 limpar_cache()
-}
+\dontshow{\}) # examplesIf}
 }

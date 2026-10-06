@@ -21,7 +21,7 @@ dos endereços do CNEFE 2022 de cada distrito (baixa só o CNEFE do
 município, uma vez).
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 distritos_censo("355030")   # cidade de São Paulo
-}
+\dontshow{\}) # examplesIf}
 }

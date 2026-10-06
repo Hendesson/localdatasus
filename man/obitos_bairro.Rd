@@ -38,11 +38,11 @@ Fortaleza (1999+, só capítulos da CID) ou da SES-RJ (demais municípios
 do RJ, bairro a partir de 2011). Veja [onde_tem_bairro()].
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 obitos_bairro("Rio de Janeiro", 2023, cid = "I")
 obitos_bairro("Rio de Janeiro", 2019:2023, cid = c("I", "J"), por = "sexo")
 obitos_bairro("Niterói", 2022, cid = "I20-I25")
 obitos_bairro(uf = "RJ", anos = 2023)
 obitos_bairro("São Paulo", 2023, por = "faixa etaria")
-}
+\dontshow{\}) # examplesIf}
 }
