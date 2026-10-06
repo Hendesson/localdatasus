@@ -10,8 +10,9 @@ This is the first submission of localdatasus to CRAN.
 
 ## Notes for the CRAN team
 
-* The documentation is in Brazilian Portuguese (`Language: pt-BR`), because
-  the package is meant for health researchers and practitioners in Brazil.
+* The Title and Description are in English. Function names, messages and
+  documentation are in Brazilian Portuguese (`Language: pt-BR`), because the
+  package is meant for health researchers and practitioners in Brazil.
 * The main functions download public data (DATASUS, IBGE and Brazilian
   health departments). Examples that need the internet are wrapped in
   `@examplesIf interactive()`, and the tests do not use the internet.

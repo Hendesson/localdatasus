@@ -1,26 +1,28 @@
 Package: localdatasus
 Type: Package
-Title: Dados de Saúde do SUS por Bairro (Escala Local)
-Version: 0.1.0
+Title: Neighborhood-Level Data from Brazil's Unified Health System
+Version: 0.2.0
 Authors@R:
     person("Hendesson", "Alves", role = c("aut", "cre"),
            email = "hendesson124@gmail.com",
            comment = c(ORCID = "0009-0009-0342-9201"))
-Description: Dados de saúde do Sistema Único de Saúde (SUS) do Brasil por
-    bairro, com população, taxas por 10 mil habitantes, coordenadas e
-    mapas. Funções simples, em português, buscam óbitos, nascimentos,
-    agravos de notificação, internações, atendimentos, chamados do SAMU e
-    estabelecimentos de saúde por bairro, escolhendo sozinhas a fonte:
-    microdados com o código de endereçamento postal (CEP) do paciente,
-    obtidos pelo pacote 'microdatasus' de Saldanha, Bastos e Barcellos (2019)
-    <doi:10.1590/0102-311x00032419>; arquivos e dados abertos de
-    secretarias de saúde; e tabuladores 'TabNet' regionais que tabulam por
-    bairro ou distrito. CEPs e nomes de bairro são ligados aos bairros
-    oficiais do Instituto Brasileiro de Geografia e Estatística (IBGE) pelo
-    Cadastro Nacional de Endereços para Fins Estatísticos (CNEFE) e pelos
-    setores do Censo 2022, com regras de qualidade para CEPs genéricos.
-    Inclui mapas estáticos e interativos e mensagens de erro com código e
-    sugestão de solução.
+Description: Retrieves health data from Brazil's Unified Health System
+    (Sistema Único de Saúde, SUS) at the neighborhood level, with 2022
+    Census population, rates per 10,000 inhabitants, coordinates and maps.
+    Simple functions return deaths, live births, notifiable diseases,
+    hospital admissions, outpatient consultations, emergency (SAMU) calls
+    and health facilities by neighborhood, choosing the data source
+    automatically: microdata with the patient's postal code (CEP),
+    downloaded with the 'microdatasus' package of Saldanha, Bastos and
+    Barcellos (2019) <doi:10.1590/0102-311x00032419>; files and open data
+    published by health departments; and regional 'TabNet' tabulators
+    that tabulate by neighborhood or district. Postal codes and
+    neighborhood names are linked to the official neighborhoods of the
+    Brazilian Institute of Geography and Statistics (IBGE) through the
+    National Address Register for Statistical Purposes (CNEFE) and the
+    2022 Census tracts, with quality rules for generic postal codes.
+    Function names, arguments, messages and documentation are in
+    Portuguese, aimed at Brazilian health researchers.
 URL: https://github.com/Hendesson/localdatasus, https://hendesson.github.io/projetos/localdatasus/
 BugReports: https://github.com/Hendesson/localdatasus/issues
 License: MIT + file LICENSE
