@@ -32,6 +32,7 @@
 # Nomes de colunas usados dentro de data.table[...] (evita avisos do
 # R CMD check sobre "variáveis globais sem definição").
 utils::globalVariables(c(
+  "mes", "idade", "faixa_etaria", "municipio_res", "nasc", "data",
   "ANO_ARQUIVO", "CLASSI_FIN", "CS_SEXO", "DT_NOTIFIC", "NU_CEP", "classificacao",
   "i.CD_BAIRRO", "i.NM_BAIRRO",
   ".", "CD_SETOR", "CD_UF", "CD_MUN", "NM_MUN", "CD_BAIRRO", "NM_BAIRRO", "CD_FCU",

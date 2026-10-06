@@ -1,6 +1,7 @@
 # localdatasus (em desenvolvimento)
 
 * Nova fonte: TabNet da Secretaria Municipal de Saúde de Fortaleza (`FOR-SIM` e `FOR-SINASC`), com óbitos e nascidos vivos por bairro de residência desde 1999. `obitos_bairro("Fortaleza", ...)` e `nascimentos_bairro("Fortaleza", ...)` passam a usá-la.
+* Nova função `atendimentos_bairro()`: atendimentos médicos da rede municipal de Curitiba (Sistema e-Saúde, dados abertos, 2019 em diante) por bairro de residência do paciente, com filtro por CID e aberturas por sexo, faixa etária, tipo de unidade, profissional e internamento. Os meses baixados ficam no cache.
 * Nova fonte: arboviroses da Prefeitura do Recife (`DENGUE-RECIFE`, `CHIKUNGUNYA-RECIFE`, `ZIKA-RECIFE`), registros individuais de 2013 em diante com CEP e nome do bairro. `agravos_bairro("dengue", "Recife", ...)` passa a usá-las; `por = "classificacao"` separa confirmados e descartados.
 * Tabela CEP → bairro: endereços do CNEFE em setores sem bairro oficial passam a receber o bairro oficial quando o nome da localidade é o mesmo (em Recife, os endereços sem bairro oficial caíram de 13,6% para 0,4%; no Rio, de 2,3% para 0,3%). O cache é refeito automaticamente (`cep_bairro_v3`).
 * `agregar_bairro()` e as funções simples usam a população dos bairros da UF certa (antes, só do RJ).

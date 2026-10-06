@@ -48,6 +48,9 @@ agravos_bairro("dengue", "Recife", 2024, por = "classificacao")  # notificados: 
 
 # Internações (pelo CEP do paciente)
 internacoes_bairro("Rio de Janeiro", 2023, cid = c("I", "J"), uf = "RJ")
+
+# Atendimentos médicos da rede municipal de Curitiba (e-Saúde), com CID
+atendimentos_bairro("Curitiba", 2025, meses = 1:3, cid = "J")
 ```
 
 As regras de escrita são poucas:
@@ -129,6 +132,8 @@ sistemas_bairro()
 | `SIA-ABO` | APAC Acompanhamento pós-bariátrica |
 | `SINASC-RJ` | Nascidos vivos da SES-RJ (CSV anual, 1996 em diante), com CEP **e nome do bairro** da mãe |
 | `DENGUE-RECIFE`, `CHIKUNGUNYA-RECIFE`, `ZIKA-RECIFE` | Arboviroses da Prefeitura do Recife (dados abertos, 2013 em diante), registro a registro, com CEP **e nome do bairro** |
+
+Fora do DATASUS, `atendimentos_bairro()` traz os **atendimentos médicos da rede municipal de Curitiba** (Sistema e-Saúde, dados abertos da Prefeitura, 2019 em diante), com o bairro do paciente e a CID. Cada arquivo publicado tem cerca de 480 MB e cobre três meses; os meses baixados ficam no cache.
 
 Os microdados do DATASUS destas bases **não têm CEP**, só o município: SIM (óbitos), SINASC (nascimentos), SINAN (agravos), SIA-PA e BPA-I (ambulatorial), SIA-PS (psicossocial), SIA-SAD, SIH-SP e SIH-ER. Para SIM, SINASC e SINAN existem, em alguns lugares, **contagens por bairro** nos TabNets regionais (abaixo).
 
