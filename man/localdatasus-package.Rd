@@ -6,9 +6,11 @@
 \alias{localdatasus-package}
 \title{localdatasus: dados de saúde do SUS por bairro}
 \description{
-Dados de saúde do SUS por bairro.
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo do localdatasus' width='120'}}
 }
 \details{
+Dados de saúde do SUS por bairro.
+
 Funções simples (comece por aqui):
 \itemize{
   \item [onde_tem_bairro()]: que dados existem por bairro, onde e para quais anos;

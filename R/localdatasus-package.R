@@ -1,5 +1,7 @@
 #' localdatasus: dados de saúde do SUS por bairro
 #'
+#' \if{html}{\figure{logo.png}{options: style='float: right' alt='logo do localdatasus' width='120'}}
+#'
 #' Dados de saúde do SUS por bairro.
 #'
 #' Funções simples (comece por aqui):
