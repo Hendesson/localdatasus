@@ -49,6 +49,9 @@ agravos_bairro("dengue", "Recife", 2024, por = "classificacao")  # notificados: 
 # Internações (pelo CEP do paciente)
 internacoes_bairro("Rio de Janeiro", 2023, cid = c("I", "J"), uf = "RJ")
 
+# Estabelecimentos de saúde (CNES) por bairro, em qualquer município
+estabelecimentos_bairro("Recife", tipo = "unidade basica")
+
 # Atendimentos médicos da rede municipal de Curitiba (e-Saúde), com CID
 atendimentos_bairro("Curitiba", 2025, meses = 1:3, cid = "J")
 ```
@@ -132,6 +135,8 @@ sistemas_bairro()
 | `SIA-ABO` | APAC Acompanhamento pós-bariátrica |
 | `SINASC-RJ` | Nascidos vivos da SES-RJ (CSV anual, 1996 em diante), com CEP **e nome do bairro** da mãe |
 | `DENGUE-RECIFE`, `CHIKUNGUNYA-RECIFE`, `ZIKA-RECIFE` | Arboviroses da Prefeitura do Recife (dados abertos, 2013 em diante), registro a registro, com CEP **e nome do bairro** |
+
+`estabelecimentos_bairro()` conta os **estabelecimentos de saúde ativos** do CNES (cadastro nacional publicado no Portal de Dados Abertos do SUS) por bairro, em qualquer município, pelo CEP do estabelecimento e, quando ele não resolve, pelo nome do bairro informado no cadastro. Mede a oferta de serviços no bairro, não a residência dos pacientes.
 
 Fora do DATASUS, `atendimentos_bairro()` traz os **atendimentos médicos da rede municipal de Curitiba** (Sistema e-Saúde, dados abertos da Prefeitura, 2019 em diante), com o bairro do paciente e a CID. Cada arquivo publicado tem cerca de 480 MB e cobre três meses; os meses baixados ficam no cache.
 
