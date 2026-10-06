@@ -104,7 +104,7 @@ ajuda()            # lista todos os códigos
 
 O pacote trabalha em silêncio e mostra só um resumo no fim ("Pronto: ..."). Para acompanhar cada consulta e cada download, use `options(localdatasus.detalhes = TRUE)`.
 
-Há exemplos comentados de cada funcionalidade na pasta [`exemplos/`](exemplos/). O script `exemplos/testar_tudo.R` roda todos de uma vez e mostra um relatório.
+Há exemplos comentados de cada funcionalidade na pasta [`exemplos/`](https://github.com/Hendesson/localdatasus/tree/main/exemplos). O script `exemplos/testar_tudo.R` roda todos de uma vez e mostra um relatório.
 
 Para salvar e abrir no QGIS:
 
@@ -298,4 +298,4 @@ No R, `citation("localdatasus")` mostra a citação com a versão instalada e a 
 
 ## Logo
 
-O logo homenageia o mapa da cólera de **John Snow** (Londres, 1854), que ligou as mortes à bomba d'água da Broad Street e se tornou o marco zero da epidemiologia espacial. Ele usa os dados reais do mapa: as ruas do Soho (linhas pretas) e as 578 mortes (pontos vermelhos). Os dados vêm do pacote [HistData](https://cran.r-project.org/package=HistData) (`Snow.streets`, `Snow.deaths`), digitalizados em 1992 por Rusty Dodson (NCGIA) e distribuídos por Waldo Tobler (1994). O script que gera o logo está em `data-raw/logo.py`; veja os créditos completos em `data-raw/README.md`.
+O logo homenageia o mapa da cólera de **John Snow** (Londres, 1854), que ligou as mortes à bomba d'água da Broad Street e se tornou o marco zero da epidemiologia espacial. Ele usa os dados reais do mapa: as ruas do Soho (linhas pretas) e as 578 mortes (pontos vermelhos). Os dados vêm do pacote [HistData](https://cran.r-project.org/package=HistData) (`Snow.streets`, `Snow.deaths`), digitalizados em 1992 por Rusty Dodson (NCGIA) e distribuídos por Waldo Tobler (1994). O script que gera o logo está em [`data-raw/logo.py`](https://github.com/Hendesson/localdatasus/blob/main/data-raw/logo.py); veja os créditos completos em [`data-raw/README.md`](https://github.com/Hendesson/localdatasus/blob/main/data-raw/README.md).
