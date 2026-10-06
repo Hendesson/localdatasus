@@ -51,6 +51,25 @@
   stringsAsFactors = FALSE
 ))
 
+# Arboviroses publicadas pela Prefeitura do Recife, registro a registro, com
+# CEP e nome do bairro (ver R/recife.R). O ano é o do arquivo (ano
+# epidemiológico de notificação).
+.sistemas <- rbind(.sistemas, data.frame(
+  sistema    = c("DENGUE-RECIFE", "CHIKUNGUNYA-RECIFE", "ZIKA-RECIFE"),
+  descricao  = c("Dengue - casos notificados (Prefeitura do Recife, 2013 em diante)",
+                 "Chikungunya - casos (Prefeitura do Recife, 2015 em diante)",
+                 "Zika - casos (Prefeitura do Recife, 2015 em diante)"),
+  col_cep    = "NU_CEP",
+  col_mun    = "ID_MN_RESI",
+  col_id     = "NU_NOTIFIC",
+  col_data   = "DT_NOTIFIC",
+  formato_data = "%Y-%m-%d",
+  col_cid    = NA_character_,
+  origem     = "Prefeitura do Recife (CSV)",
+  col_bairro = "NM_BAIRRO",
+  stringsAsFactors = FALSE
+))
+
 URL_SINASC_RJ <- "https://sistemas.saude.rj.gov.br/tabnetbd/sinasc/dadoscsv/dnrj%d.zip"
 
 #' Bases de dados disponíveis por bairro

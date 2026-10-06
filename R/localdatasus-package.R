@@ -32,6 +32,8 @@
 # Nomes de colunas usados dentro de data.table[...] (evita avisos do
 # R CMD check sobre "variáveis globais sem definição").
 utils::globalVariables(c(
+  "ANO_ARQUIVO", "CLASSI_FIN", "CS_SEXO", "DT_NOTIFIC", "NU_CEP", "classificacao",
+  "i.CD_BAIRRO", "i.NM_BAIRRO",
   ".", "CD_SETOR", "CD_UF", "CD_MUN", "NM_MUN", "CD_BAIRRO", "NM_BAIRRO", "CD_FCU",
   "v0001", "codmun", "populacao", "COD_MUNICIPIO", "COD_SETOR", "CEP", "DSC_LOCALIDADE",
   "LATITUDE", "LONGITUDE", "oficial", "localidade", "bairro", "fonte_bairro", "id_bairro",

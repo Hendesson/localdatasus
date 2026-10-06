@@ -46,8 +46,9 @@ URL_CNEFE_MUN <- paste0(
 cep_bairro <- function(uf, manter_cnefe = FALSE) {
   cod <- codigo_uf(uf)
   uf  <- toupper(uf)
-  # "v2": versão do formato da tabela (mudou ao incluir lat_cep/lon_cep).
-  arq_rds <- file.path(pasta_cache(), paste0("cep_bairro_v2_", uf, ".rds"))
+  # Versão do formato da tabela: v2 incluiu lat_cep/lon_cep; v3 passou a
+  # dar o bairro oficial às localidades com o mesmo nome (ver abaixo).
+  arq_rds <- file.path(pasta_cache(), paste0("cep_bairro_v3_", uf, ".rds"))
   if (file.exists(arq_rds)) return(readRDS(arq_rds))
   # Sem a barra de progresso do data.table ("Processados ... grupos").
   op <- options(datatable.showProgress = FALSE)
@@ -78,6 +79,20 @@ cep_bairro <- function(uf, manter_cnefe = FALSE) {
     oficial      = !is.na(CD_BAIRRO),
     localidade   = trimws(DSC_LOCALIDADE)
   )]
+  # Endereços em setores sem bairro (ex.: 13,6% em Recife, 2,3% no Rio)
+  # ficariam com a localidade escrita no endereço ("AFOGADOS"), duplicando
+  # o bairro oficial ("Afogados"). Se o nome bate com um bairro oficial do
+  # mesmo município, vale o oficial.
+  ofic <- unique(setores_censo()[CD_UF == cod & !is.na(CD_BAIRRO), .(codmun, CD_BAIRRO, NM_BAIRRO)])
+  ofic[, chave := chave_bairro(NM_BAIRRO)]
+  ofic <- ofic[!duplicated(ofic[, .(codmun, chave)]) & !duplicated(ofic[, .(codmun, chave)], fromLast = TRUE)]
+  locs <- unique(end[!oficial & codmun %in% ofic$codmun, .(codmun, localidade)])
+  locs[, chave := chave_bairro(localidade)]
+  locs <- ofic[locs, on = .(codmun, chave), nomatch = NULL]
+  if (nrow(locs) > 0) {
+    end[locs, on = .(codmun, localidade), `:=`(CD_BAIRRO = i.CD_BAIRRO, NM_BAIRRO = i.NM_BAIRRO)]
+    end[, oficial := !is.na(CD_BAIRRO)]
+  }
   end[, `:=`(
     bairro       = data.table::fifelse(oficial, NM_BAIRRO, localidade),
     fonte_bairro = data.table::fifelse(oficial, "IBGE 2022 (oficial)", "CNEFE (localidade)")

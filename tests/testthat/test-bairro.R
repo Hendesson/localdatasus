@@ -23,7 +23,7 @@ preparar_cache_falso <- function() {
     lon_bairro     = c(-43.175, -43.12),
     n_enderecos    = c(150L, 5000L)
   )
-  saveRDS(list(ceps = ceps, bairros = bairros), file.path(pasta, "cep_bairro_v2_RJ.rds"))
+  saveRDS(list(ceps = ceps, bairros = bairros), file.path(pasta, "cep_bairro_v3_RJ.rds"))
   setores <- data.table::data.table(
     CD_SETOR = c("330455705000001", "330455705000002"), CD_UF = "33",
     CD_MUN = "3304557", NM_MUN = "Rio de Janeiro", CD_DIST = "330455705",

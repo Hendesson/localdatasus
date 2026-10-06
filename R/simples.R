@@ -298,7 +298,9 @@ agregar_registros <- function(d, por, contagem, fonte) {
   if (!is.null(por)) {
     op <- names(d)[!grepl("c\u00f3digo|codigo", names(d), ignore.case = TRUE)]
     r <- normalizar_rotulo(op)
-    pos <- which(grepl(normalizar_rotulo(por), r, fixed = TRUE))
+    # Nome exato primeiro ("sexo" e não "CS_SEXO"); senão, contém.
+    pos <- which(r == normalizar_rotulo(por))
+    if (length(pos) == 0) pos <- which(grepl(normalizar_rotulo(por), r, fixed = TRUE))
     if (length(pos) == 0) erro("LDS-10", "N\u00e3o achei \"", por, "\" nas colunas da base.")
     if (length(pos) > 1) message("Usando \"", op[pos[1]], "\".")
     col_por <- op[pos[1]]
@@ -313,7 +315,9 @@ agregar_registros <- function(d, por, contagem, fonte) {
            id_unidade = id_bairro, nome_ibge = bairro, cd_ibge = cd_bairro_ibge,
            lat = lat_bairro, lon = lon_bairro,
            bairro_tabnet = data.table::fifelse(is.na(bairro), "(sem bairro)", bairro))]
-  pop <- data.table::as.data.table(populacao_bairro("RJ"))[, .(cd_ibge = cd_bairro_ibge, populacao)]
+  ufs <- names(.ufs)[.ufs %in% unique(substr(stats::na.omit(d$codmun), 1, 2))]
+  pop <- data.table::rbindlist(lapply(ufs, function(u) data.table::as.data.table(populacao_bairro(u))))
+  pop <- pop[, .(cd_ibge = cd_bairro_ibge, populacao)]
   d <- pop[d, on = "cd_ibge"]
   arrumar_tabela(d[, .(ano, codmun, municipio, categoria, n, ligacao, id_unidade, nome_ibge,
                        bairro_tabnet, populacao, lat, lon, cd_ibge, fonte, unidade)],
@@ -325,7 +329,10 @@ agregar_registros <- function(d, por, contagem, fonte) {
 #' Conta casos do SINAN (dengue, tuberculose, sífilis, violência...) por
 #' bairro (ou distrito) de residência, com população, taxa por 10 mil e
 #' coordenadas. Fontes: TabNets da Prefeitura do Rio, da Prefeitura de
-#' São Paulo e da DIVE de Santa Catarina (todos os municípios). Veja
+#' São Paulo e da DIVE de Santa Catarina (todos os municípios) e, no
+#' Recife, os registros de dengue, chikungunya e zika publicados pela
+#' Prefeitura (a dengue traz os casos notificados; use
+#' `por = "classificacao"` para separar confirmados e descartados). Veja
 #' [onde_tem_bairro()].
 #'
 #' @inheritParams obitos_bairro
@@ -349,6 +356,8 @@ agravos_bairro <- function(agravo, municipio = NULL, anos, por = NULL, uf = NULL
     prefixo <- "SP-SINAN-"
   } else if (lugar$uf == "SC") {
     prefixo <- "SC-SINAN-"
+  } else if (identical(lugar$codmun, COD_RECIFE)) {
+    return(agravos_recife(agravo, anos, por))
   } else {
     sem_fonte(paste("casos de", agravo), lugar)
   }
@@ -433,12 +442,16 @@ onde_tem_bairro <- function() {
   tab <- data.frame(dado, descricao = f$descricao, local, unidade = f$unidade, funcao,
                     fonte = f$fonte, stringsAsFactors = FALSE)
   extra <- data.frame(
-    dado = c("nascimentos", "interna\u00e7\u00f5es"),
+    dado = c("nascimentos", "interna\u00e7\u00f5es", "dengue", "chikungunya", "zika"),
     descricao = c("Nascidos vivos (CEP e bairro da m\u00e3e), 1996 em diante",
-                  "AIHs aprovadas (CEP do paciente)"),
-    local = c("Rio de Janeiro (todos os munic\u00edpios)", "todas as UFs"),
-    unidade = "bairro", funcao = c("nascimentos_bairro()", "internacoes_bairro()"),
-    fonte = c("SINASC-RJ", "SIH-RD"), stringsAsFactors = FALSE)
+                  "AIHs aprovadas (CEP do paciente)",
+                  .sistemas$descricao[match(c("DENGUE-RECIFE", "CHIKUNGUNYA-RECIFE", "ZIKA-RECIFE"),
+                                            .sistemas$sistema)]),
+    local = c("Rio de Janeiro (todos os munic\u00edpios)", "todas as UFs", rep("Recife (capital)", 3)),
+    unidade = "bairro",
+    funcao = c("nascimentos_bairro()", "internacoes_bairro()", rep("agravos_bairro()", 3)),
+    fonte = c("SINASC-RJ", "SIH-RD", "DENGUE-RECIFE", "CHIKUNGUNYA-RECIFE", "ZIKA-RECIFE"),
+    stringsAsFactors = FALSE)
   tab <- rbind(tab, extra)
   # A dengue do Rio tem duas bases (2007-2011 e 2012+); para quem usa, é uma só.
   tab <- tab[!grepl(" [0-9]{4}$", tab$dado), ]
@@ -451,4 +464,19 @@ sem_fonte <- function(o_que, lugar) {
   onde <- if (is.na(lugar$codmun)) lugar$uf else paste0(lugar$nome, " (", lugar$uf, ")")
   erro("LDS-05", "N\u00e3o h\u00e1 fonte p\u00fablica de ", o_que, " por bairro para ", onde,
        ". Veja onde_tem_bairro().")
+}
+
+# Recife: registros individuais da Prefeitura, agregados aqui.
+agravos_recife <- function(agravo, anos, por) {
+  opcoes <- c("dengue", "chikungunya", "zika")
+  pega <- opcoes[startsWith(opcoes, normalizar_rotulo(agravo))]
+  if (length(pega) != 1) {
+    erro("LDS-06", "Agravo \"", agravo, "\" n\u00e3o dispon\u00edvel no Recife. Op\u00e7\u00f5es: ",
+         paste(opcoes, collapse = ", "), ".")
+  }
+  sistema <- paste0(toupper(pega), "-RECIFE")
+  d <- baixar_bairro(sistema, "PE", min(anos), max(anos))
+  d <- d[d$ano_ref %in% anos & !is.na(d$codmun_paciente) & d$codmun_paciente == COD_RECIFE, ]
+  if (nrow(d) == 0) erro("LDS-12", "Nenhum caso de ", pega, " no Recife em ", paste(anos, collapse = ", "), ".")
+  agregar_registros(d, por, "casos", sistema)
 }

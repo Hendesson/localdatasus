@@ -27,7 +27,10 @@ Como em [obitos_bairro()], com `casos` no lugar de `obitos`.
 Conta casos do SINAN (dengue, tuberculose, sífilis, violência...) por
 bairro (ou distrito) de residência, com população, taxa por 10 mil e
 coordenadas. Fontes: TabNets da Prefeitura do Rio, da Prefeitura de
-São Paulo e da DIVE de Santa Catarina (todos os municípios). Veja
+São Paulo e da DIVE de Santa Catarina (todos os municípios) e, no
+Recife, os registros de dengue, chikungunya e zika publicados pela
+Prefeitura (a dengue traz os casos notificados; use
+`por = "classificacao"` para separar confirmados e descartados). Veja
 [onde_tem_bairro()].
 }
 \examples{

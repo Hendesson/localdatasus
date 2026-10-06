@@ -17,7 +17,7 @@ cache_bairros_falso <- function() {
   ceps <- data.frame(cep = character(), codmun_cep = character(), id_bairro = character(),
                      pct_bairro = numeric(), n_end_cep = integer(), lat_cep = numeric(),
                      lon_cep = numeric())
-  saveRDS(list(ceps = ceps, bairros = bairros), file.path(pasta, "cep_bairro_v2_RJ.rds"))
+  saveRDS(list(ceps = ceps, bairros = bairros), file.path(pasta, "cep_bairro_v3_RJ.rds"))
   setores <- data.table::data.table(
     CD_SETOR = sprintf("33045570500000%d", 1:4), CD_UF = "33", CD_MUN = "3304557",
     NM_MUN = "Rio de Janeiro", CD_DIST = "330455705", NM_DIST = "Rio de Janeiro",

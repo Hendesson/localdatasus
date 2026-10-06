@@ -132,6 +132,9 @@ baixar_bairro <- function(sistema, uf, ano_inicio, ano_fim = ano_inicio,
   } else if (cfg$sistema == "SINASC-RJ") {
     if (uf != "RJ") erro("LDS-18", "SINASC-RJ s\u00f3 existe para uf = \"RJ\".")
     d <- baixar_sinasc_rj(ano_inicio, ano_fim, vars)
+  } else if (cfg$origem == "Prefeitura do Recife (CSV)") {
+    if (uf != "PE") erro("LDS-18", cfg$sistema, " s\u00f3 existe para uf = \"PE\".")
+    d <- baixar_recife(tolower(sub("-RECIFE$", "", cfg$sistema)), ano_inicio, ano_fim, vars)
   }
   if (nrow(d) == 0) erro("LDS-12", "Nenhum registro encontrado para esse per\u00edodo.")
 
@@ -141,6 +144,8 @@ baixar_bairro <- function(sistema, uf, ano_inicio, ano_fim = ano_inicio,
   formato <- if (cfg$formato_data == "%Y%m") "%Y%m%d" else cfg$formato_data
   d[, data_ref := as.Date(datas, format = formato)]
   d[, ano_ref := as.integer(format(data_ref, "%Y"))]
+  # Arquivos anuais por ano epidemiológico: vale o ano do arquivo.
+  if ("ANO_ARQUIVO" %in% names(d)) d[, ano_ref := as.integer(ANO_ARQUIVO)]
   # Bases anuais por data do evento: filtra os meses pedidos.
   if (cfg$origem != "microdatasus") {
     mes <- as.integer(format(d$data_ref, "%m"))
