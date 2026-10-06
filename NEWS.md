@@ -1,5 +1,6 @@
 # localdatasus (em desenvolvimento)
 
+* Correção: a padronização de nomes e rótulos tirava os acentos de forma diferente no macOS ("Etária" virava "Et'aria"), o que podia impedir a escolha de opções nos TabNets. Agora o resultado é o mesmo em Linux, macOS e Windows.
 * Preparação para o CRAN: o 'microdatasus' passa a vir do CRAN (sai o campo `Remotes`); ORCID do autor; exemplos que baixam dados usam `@examplesIf interactive()`; `ajuda()` devolve um objeto com método `print()`; os testes não usam a internet nem o cache do usuário; nova vinheta "Primeiros passos"; guia de contribuição e checagem automática no GitHub Actions (Linux, macOS e Windows).
 * Nova fonte: TabNet da Secretaria Municipal de Saúde de Fortaleza (`FOR-SIM` e `FOR-SINASC`), com óbitos e nascidos vivos por bairro de residência desde 1999. `obitos_bairro("Fortaleza", ...)` e `nascimentos_bairro("Fortaleza", ...)` passam a usá-la.
 * Nova função `samu_bairro()`: chamados do SAMU 192 do Recife e região metropolitana por bairro do local da ocorrência (dados abertos da Prefeitura do Recife, 2016 em diante), com filtro por tipo de ocorrência e aberturas por subtipo, sexo, origem do chamado e desfecho.

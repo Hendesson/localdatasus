@@ -95,7 +95,7 @@ tn_formulario <- function(url_def, dialeto) {
 
 # Normaliza rótulos para comparação: sem acento, minúsculo, "_" vira espaço.
 normalizar_rotulo <- function(x) {
-  x <- iconv(x, from = "UTF-8", to = "ASCII//TRANSLIT", sub = "")
+  x <- sem_acento(x)
   x <- tolower(gsub("_", " ", x))
   trimws(gsub("\\s+", " ", x))
 }
