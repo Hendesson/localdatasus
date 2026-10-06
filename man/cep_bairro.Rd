@@ -44,3 +44,18 @@ tab <- cep_bairro("AC")
 head(tab$ceps)
 \dontshow{\}) # examplesIf}
 }
+\references{
+Instituto Brasileiro de Geografia e Estatística. Coordenadas geográficas
+dos endereços no Censo Demográfico 2022: nota metodológica n. 01. Rio de
+Janeiro: IBGE; 2024.
+
+Empresa Brasileira de Correios e Telégrafos. Endereçamento de
+correspondências: guia técnico. Versão 1.4. Brasília: Correios; 2021.
+(Estrutura do CEP e sufixos especiais.)
+
+Abordagem relacionada, com serviços de geocodificação: Rocha TAH, Silva
+NC, Amaral PVM et al. Geolocalização de internações cadastradas no Sistema
+de Informações Hospitalares do Sistema Único de Saúde: uma solução baseada
+no programa estatístico R. Epidemiologia e Serviços de Saúde 2018;
+27(4):e2017444. \doi{10.5123/s1679-49742018000400016}.
+}

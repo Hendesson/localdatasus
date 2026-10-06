@@ -1,5 +1,6 @@
 # Checagem do pacote em Linux, macOS e Windows a cada push e pull request,
-# como o CRAN faz. Modelo: https://github.com/r-lib/actions/tree/v2/examples
+# como o CRAN faz. Adaptado do modelo check-standard de
+# https://github.com/r-lib/actions/tree/v2/examples (licença CC0-1.0).
 on:
   push:
     branches: [main]

@@ -82,6 +82,19 @@ unidades_ibge <- function(uf, unidade = c("bairro", "distrito"), codmuns = NULL)
 #'   `"não encontrado"` ou `"ignorado"`), `id_unidade`, `nome_ibge`,
 #'   `fonte_unidade`, `cd_ibge`, `lat`, `lon` e `populacao` (só em unidades
 #'   oficiais do IBGE).
+#' @references
+#' Levenshtein VI. Binary codes capable of correcting deletions, insertions,
+#' and reversals. Soviet Physics Doklady 1966; 10:707-10. (Distância de
+#' edição, calculada com [utils::adist()].)
+#'
+#' Christen P. Data matching: concepts and techniques for record linkage,
+#' entity resolution, and duplicate detection. Berlin: Springer; 2012.
+#' \doi{10.1007/978-3-642-31164-2}.
+#'
+#' Camargo Jr. KR, Coeli CM. Reclink: aplicativo para o relacionamento de
+#' bases de dados, implementando o método probabilistic record linkage.
+#' Cadernos de Saúde Pública 2000; 16(2):439-47.
+#' \doi{10.1590/s0102-311x2000000200014}.
 #' @export
 #' @examplesIf interactive()
 #' ligar_bairros(c("Jd. América", "TIJUCA", "Ignorado"), "330455", "RJ")

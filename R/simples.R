@@ -45,7 +45,9 @@ achar_lugar <- function(municipio, uf) {
 # ---------------------------------------------------------------------------
 # CID-10
 
-# Capítulo(s) da CID-10 de cada letra.
+# Capítulo(s) da CID-10 de cada letra, conforme a estrutura da Classificação
+# Internacional de Doenças, 10ª revisão (OMS; versão em português do
+# DATASUS/Centro Colaborador da OMS para a Classificação de Doenças em Português).
 .capitulos_cid <- list(
   A = 1, B = 1, C = 2, D = c(2, 3), E = 4, F = 5, G = 6, H = c(7, 8), I = 9, J = 10,
   K = 11, L = 12, M = 13, N = 14, O = 15, P = 16, Q = 17, R = 18, S = 19, T = 19,

@@ -66,3 +66,6 @@ minha_tabela <- data.frame(id = 1:3, cep = c("20031170", "22041001", "24020005")
 adicionar_bairro(minha_tabela, "RJ", col_cep = "cep")
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+[cep_bairro()], com as fontes e referências da tabela CEP → bairro.
+}

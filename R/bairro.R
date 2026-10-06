@@ -34,6 +34,7 @@
 #'   mensal) não sejam confundidas com CEPs genéricos.
 #' @inheritParams sih_bairro
 #' @return `dados` com as colunas acima acrescentadas.
+#' @seealso [cep_bairro()], com as fontes e referências da tabela CEP → bairro.
 #' @export
 #' @examplesIf interactive()
 #' minha_tabela <- data.frame(id = 1:3, cep = c("20031170", "22041001", "24020005"))

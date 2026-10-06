@@ -21,7 +21,8 @@ COD_RECIFE <- "261160"
 )
 
 # Classificação final da dengue, segundo o dicionário publicado pela
-# Prefeitura do Recife (metadados dos casos de dengue).
+# Prefeitura do Recife ("Metadados dos Casos Confirmados de Dengue", no
+# conjunto casos-de-dengue-zika-e-chikungunya de dados.recife.pe.gov.br).
 .classi_dengue <- c(
   "1" = "Dengue cl\u00e1ssico", "2" = "Dengue com complica\u00e7\u00f5es",
   "3" = "Febre hemorr\u00e1gica do dengue", "4" = "S\u00edndrome do choque da dengue",

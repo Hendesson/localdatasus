@@ -9,6 +9,9 @@
 #'   \item [nascimentos_bairro()]: nascidos vivos por bairro;
 #'   \item [agravos_bairro()]: dengue, tuberculose, sífilis, violência... por bairro;
 #'   \item [internacoes_bairro()]: internações do SUS por bairro (pelo CEP);
+#'   \item [atendimentos_bairro()]: atendimentos médicos da rede municipal de Curitiba;
+#'   \item [samu_bairro()]: chamados do SAMU 192 do Recife e região metropolitana;
+#'   \item [estabelecimentos_bairro()]: estabelecimentos de saúde (CNES) por bairro;
 #'   \item [mapa_bairro()] e [mapa_interativo()]: mapas prontos dessas tabelas;
 #'   \item [ajuda()]: explica os códigos de erro (ex.: `ajuda("LDS-03")`).
 #' }
@@ -24,6 +27,18 @@
 #'   \item [cnes_coordenadas()]: coordenadas dos estabelecimentos de saúde;
 #'   \item [limpar_cache()]: apaga os arquivos baixados.
 #' }
+#'
+#' @references
+#' Saldanha RF, Bastos RR, Barcellos C. Microdatasus: pacote para download e
+#' pré-processamento de microdados do Departamento de Informática do SUS
+#' (DATASUS). Cadernos de Saúde Pública 2019; 35:e00032419.
+#' \doi{10.1590/0102-311x00032419}. (Os microdados do DATASUS são baixados
+#' com o pacote 'microdatasus'.)
+#'
+#' Instituto Brasileiro de Geografia e Estatística. Coordenadas geográficas
+#' dos endereços no Censo Demográfico 2022: nota metodológica n. 01. Rio de
+#' Janeiro: IBGE; 2024. (Cadastro Nacional de Endereços para Fins
+#' Estatísticos, CNEFE, usado na ligação entre CEP e bairro.)
 #'
 #' @keywords internal
 #' @importFrom data.table := .N
