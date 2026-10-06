@@ -1,6 +1,7 @@
 # localdatasus (em desenvolvimento)
 
 * Nova fonte: TabNet da Secretaria Municipal de Saúde de Fortaleza (`FOR-SIM` e `FOR-SINASC`), com óbitos e nascidos vivos por bairro de residência desde 1999. `obitos_bairro("Fortaleza", ...)` e `nascimentos_bairro("Fortaleza", ...)` passam a usá-la.
+* Nova função `samu_bairro()`: chamados do SAMU 192 do Recife e região metropolitana por bairro do local da ocorrência (dados abertos da Prefeitura do Recife, 2016 em diante), com filtro por tipo de ocorrência e aberturas por subtipo, sexo, origem do chamado e desfecho.
 * Nova função `estabelecimentos_bairro()`: estabelecimentos de saúde ativos do CNES (Portal de Dados Abertos do SUS) por bairro, em qualquer município, com filtro por tipo de unidade (descrições da API de Dados Abertos do Ministério da Saúde) e opção de contar só os que atendem pelo SUS.
 * Nova função `atendimentos_bairro()`: atendimentos médicos da rede municipal de Curitiba (Sistema e-Saúde, dados abertos, 2019 em diante) por bairro de residência do paciente, com filtro por CID e aberturas por sexo, faixa etária, tipo de unidade, profissional e internamento. Os meses baixados ficam no cache.
 * Nova fonte: arboviroses da Prefeitura do Recife (`DENGUE-RECIFE`, `CHIKUNGUNYA-RECIFE`, `ZIKA-RECIFE`), registros individuais de 2013 em diante com CEP e nome do bairro. `agravos_bairro("dengue", "Recife", ...)` passa a usá-las; `por = "classificacao"` separa confirmados e descartados.

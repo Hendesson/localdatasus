@@ -32,6 +32,7 @@
 # Nomes de colunas usados dentro de data.table[...] (evita avisos do
 # R CMD check sobre "variáveis globais sem definição").
 utils::globalVariables(c(
+  "chave_mun", "motivo_finalizacao",
   "CO_MOTIVO_DESAB", "CO_IBGE", "CO_AMBULATORIAL_SUS", "TP_UNIDADE", "tipo",
   "mes", "idade", "faixa_etaria", "municipio_res", "nasc", "data",
   "ANO_ARQUIVO", "CLASSI_FIN", "CS_SEXO", "DT_NOTIFIC", "NU_CEP", "classificacao",

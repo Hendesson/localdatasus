@@ -443,20 +443,21 @@ onde_tem_bairro <- function() {
                     fonte = f$fonte, stringsAsFactors = FALSE)
   extra <- data.frame(
     dado = c("nascimentos", "interna\u00e7\u00f5es", "dengue", "chikungunya", "zika",
-             "atendimentos m\u00e9dicos", "estabelecimentos de sa\u00fade"),
+             "atendimentos m\u00e9dicos", "estabelecimentos de sa\u00fade", "chamados do SAMU"),
     descricao = c("Nascidos vivos (CEP e bairro da m\u00e3e), 1996 em diante",
                   "AIHs aprovadas (CEP do paciente)",
                   .sistemas$descricao[match(c("DENGUE-RECIFE", "CHIKUNGUNYA-RECIFE", "ZIKA-RECIFE"),
                                             .sistemas$sistema)],
                   "Atendimentos m\u00e9dicos da rede municipal (e-Sa\u00fade), 2019 em diante",
-                  "Estabelecimentos ativos do CNES (local do estabelecimento, n\u00e3o do paciente)"),
+                  "Estabelecimentos ativos do CNES (local do estabelecimento, n\u00e3o do paciente)",
+                  "Solicita\u00e7\u00f5es ao SAMU 192 (local da ocorr\u00eancia), 2016 em diante"),
     local = c("Rio de Janeiro (todos os munic\u00edpios)", "todas as UFs", rep("Recife (capital)", 3),
-              "Curitiba (capital)", "todas as UFs"),
+              "Curitiba (capital)", "todas as UFs", "Recife e regi\u00e3o metropolitana"),
     unidade = "bairro",
     funcao = c("nascimentos_bairro()", "internacoes_bairro()", rep("agravos_bairro()", 3),
-               "atendimentos_bairro()", "estabelecimentos_bairro()"),
+               "atendimentos_bairro()", "estabelecimentos_bairro()", "samu_bairro()"),
     fonte = c("SINASC-RJ", "SIH-RD", "DENGUE-RECIFE", "CHIKUNGUNYA-RECIFE", "ZIKA-RECIFE",
-              "e-Sa\u00fade Curitiba", "CNES (dados abertos)"),
+              "e-Sa\u00fade Curitiba", "CNES (dados abertos)", "SAMU 192 Recife"),
     stringsAsFactors = FALSE)
   tab <- rbind(tab, extra)
   # A dengue do Rio tem duas bases (2007-2011 e 2012+); para quem usa, é uma só.

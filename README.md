@@ -49,6 +49,9 @@ agravos_bairro("dengue", "Recife", 2024, por = "classificacao")  # notificados: 
 # Internações (pelo CEP do paciente)
 internacoes_bairro("Rio de Janeiro", 2023, cid = c("I", "J"), uf = "RJ")
 
+# Chamados do SAMU 192 do Recife e região metropolitana (local da ocorrência)
+samu_bairro("Recife", 2024, tipo = "causas externas", por = "subtipo")
+
 # Estabelecimentos de saúde (CNES) por bairro, em qualquer município
 estabelecimentos_bairro("Recife", tipo = "unidade basica")
 
@@ -135,6 +138,8 @@ sistemas_bairro()
 | `SIA-ABO` | APAC Acompanhamento pós-bariátrica |
 | `SINASC-RJ` | Nascidos vivos da SES-RJ (CSV anual, 1996 em diante), com CEP **e nome do bairro** da mãe |
 | `DENGUE-RECIFE`, `CHIKUNGUNYA-RECIFE`, `ZIKA-RECIFE` | Arboviroses da Prefeitura do Recife (dados abertos, 2013 em diante), registro a registro, com CEP **e nome do bairro** |
+
+`samu_bairro()` conta os **chamados do SAMU 192 do Recife** (serviço metropolitano: Recife, Jaboatão dos Guararapes, Olinda, Paulista e outros) por bairro do **local da ocorrência**, de 2016 em diante, pelo portal de dados abertos da Prefeitura do Recife.
 
 `estabelecimentos_bairro()` conta os **estabelecimentos de saúde ativos** do CNES (cadastro nacional publicado no Portal de Dados Abertos do SUS) por bairro, em qualquer município, pelo CEP do estabelecimento e, quando ele não resolve, pelo nome do bairro informado no cadastro. Mede a oferta de serviços no bairro, não a residência dos pacientes.
 
