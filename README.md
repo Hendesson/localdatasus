@@ -2,12 +2,16 @@
 
 Dados de saúde do SUS **por bairro**, em R, com população, taxas e coordenadas.
 
-O [microdatasus](https://github.com/rfsaldanha/microdatasus) traz os dados do SUS por **município**. O `localdatasus` desce ao **bairro**. Ele junta três coisas:
-- os microdados com CEP do paciente;
-- os arquivos das secretarias estaduais;
-- os TabNets das prefeituras e dos estados que tabulam por bairro.
+O [microdatasus](https://CRAN.R-project.org/package=microdatasus) traz os dados do SUS por **município**. O `localdatasus` desce ao **bairro**. Ele junta quatro tipos de fonte:
+
+- os microdados com CEP do paciente (internações e APACs, em todo o país);
+- os arquivos das secretarias de saúde (nascidos vivos do RJ);
+- os TabNets das prefeituras e dos estados que tabulam por bairro (Rio de Janeiro, São Paulo, Fortaleza e Santa Catarina);
+- portais de dados abertos (arboviroses e SAMU do Recife, atendimentos de Curitiba e o cadastro nacional de estabelecimentos, CNES).
 
 Cada bairro é ligado ao bairro oficial do IBGE, com população do Censo 2022 e coordenadas.
+
+**Documentação completa, com tutoriais:** <https://hendesson.github.io/localdatasus/>
 
 ## Instalação
 

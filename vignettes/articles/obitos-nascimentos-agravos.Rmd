@@ -1,0 +1,96 @@
+---
+title: "Óbitos, nascimentos e agravos"
+description: "Filtrar por causa (CID), abrir por sexo ou idade, juntar vários anos e trocar de lugar."
+---
+
+Todas as funções seguem a mesma ideia: **o quê**, **onde** e **quando**.
+
+```r
+obitos_bairro(     municipio, anos, cid = , por = )
+nascimentos_bairro(municipio, anos,         por = )
+agravos_bairro(agravo, municipio, anos,     por = )
+```
+
+## Causa da morte: o argumento `cid`
+
+| Você escreve | Significa |
+|---|---|
+| `cid = "I"` | capítulo inteiro: doenças do aparelho circulatório (I00–I99) |
+| `cid = c("I", "J")` | circulatório **e** respiratório |
+| `cid = "I21"` | só infarto agudo do miocárdio |
+| `cid = "I20-I25"` | doenças isquêmicas do coração (I20 a I25) |
+| sem `cid` | todas as causas |
+
+```r
+obitos_bairro("Rio de Janeiro", 2023, cid = "J")          # respiratório
+obitos_bairro("Niterói", 2022, cid = "I20-I25")          # isquêmicas, em Niterói
+```
+
+Tem um exemplo para cada capítulo da CID, em óbitos e internações, no [tutorial 7](exemplos-por-cid.html).
+
+## Abrir a contagem: o argumento `por`
+
+Escreva a variável em linguagem comum. O pacote acha a opção certa no site:
+
+```r
+obitos_bairro("Rio de Janeiro", 2023, cid = "I", por = "sexo")
+obitos_bairro("Rio de Janeiro", 2023, cid = "I", por = "faixa etaria")
+obitos_bairro("Rio de Janeiro", 2023, por = "raca")
+```
+
+A tabela ganha uma coluna com o nome da variável (`sexo`, `faixa_etaria`...), e cada bairro passa a ter uma linha por categoria.
+
+> **Dica**
+>
+> Quando existe mais de uma opção parecida (em São Paulo há "Faixa Etária (5)", "(9)" e "(13)"), o pacote usa a primeira e avisa quais são as outras.
+
+## Vários anos
+
+```r
+resp <- obitos_bairro("Rio de Janeiro", 2019:2023, cid = "J")
+aggregate(obitos ~ ano, data = resp, FUN = sum)       # total por ano
+```
+
+## Outros lugares
+
+```r
+obitos_bairro(uf = "RJ", anos = 2023)                 # todos os municípios do RJ
+obitos_bairro("São Paulo", 2023)                      # 96 distritos de SP
+obitos_bairro("Fortaleza", 2023, cid = "I")           # Fortaleza (só capítulos da CID)
+```
+
+Se o nome do município existir em mais de um estado, informe a UF: `obitos_bairro("Bom Jardim", 2023, uf = "RJ")`.
+
+## Nascimentos
+
+```r
+nasc <- nascimentos_bairro("Rio de Janeiro", 2023, por = "tipo de parto")
+
+# Proporção de cesáreas por bairro
+tab <- xtabs(nascimentos ~ bairro + tipo_de_parto, data = nasc)
+round(100 * tab[, "Cesário"] / rowSums(tab), 1)
+```
+
+Em **Fortaleza**, nascimentos e óbitos vêm do TabNet da Secretaria Municipal de Saúde, desde 1999: `nascimentos_bairro("Fortaleza", 2023)`. Nesse TabNet, a causa do óbito só pode ser filtrada por capítulo da CID (uma letra, como `"I"`).
+
+Nos demais municípios do RJ, os nascimentos vêm dos **microdados da SES-RJ**, registro a registro. O bairro é encontrado pelo CEP da mãe e, quando o CEP não resolve, pelo nome do bairro escrito na declaração. Em 2023, 86% dos nascimentos ganharam bairro.
+
+## Agravos de notificação (SINAN)
+
+```r
+agravos_bairro("dengue", "Rio de Janeiro", 2024)
+agravos_bairro("tuberculose", "São Paulo", 2022:2024)
+agravos_bairro("dengue", "Joinville", 2024, por = "sexo")
+agravos_bairro("dengue", "Recife", 2024, por = "classificacao")   # confirmados e descartados
+agravos_bairro("sifilis congenita", "Rio de Janeiro", 2023)
+```
+
+No **Recife**, dengue, chikungunya e zika vêm dos dados abertos da Prefeitura, registro a registro, com CEP e nome do bairro. O arquivo da dengue traz **todos os casos notificados**, inclusive os descartados: use `por = "classificacao"` para separá-los.
+
+Para ver os agravos de cada lugar:
+
+```r
+subset(onde_tem_bairro(), funcao == "agravos_bairro()")[, c("dado", "local")]
+```
+
+**Próximo:** [3. Mapas](mapas.html)

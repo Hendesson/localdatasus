@@ -1,0 +1,84 @@
+---
+title: "Atendimentos, SAMU e estabelecimentos"
+description: "Atenção primária em Curitiba, chamados do SAMU no Recife e estabelecimentos de saúde em qualquer município."
+---
+
+Além de óbitos, nascimentos, agravos e internações, o pacote traz três outras bases por bairro. Cada uma mede uma coisa diferente, então leia com atenção **de quem é o bairro** em cada caso.
+
+| Função | Onde | O bairro é... |
+|---|---|---|
+| `atendimentos_bairro()` | Curitiba | da **residência do paciente** |
+| `samu_bairro()` | Recife e região metropolitana | do **local da ocorrência** |
+| `estabelecimentos_bairro()` | qualquer município | do **estabelecimento** |
+
+## Atendimentos médicos em Curitiba (e-Saúde)
+
+A Prefeitura de Curitiba publica todos os atendimentos médicos da rede municipal, nas unidades de saúde, nas UPAs e em outros serviços, com o **bairro do paciente** e a **CID** do atendimento.
+
+```r
+# Atendimentos por doenças respiratórias (capítulo J), de janeiro a março
+resp <- atendimentos_bairro("Curitiba", 2025, meses = 1:3, cid = "J")
+
+# Asma por faixa etária
+asma <- atendimentos_bairro("Curitiba", 2025, meses = 1:3, cid = "J45", por = "faixa etaria")
+
+# Quanto é UPA e quanto é unidade básica
+atendimentos_bairro("Curitiba", 2025, meses = 6, por = "tipo de unidade")
+```
+
+O argumento `por` aceita `"sexo"`, `"faixa etaria"`, `"tipo de unidade"`, `"profissional"` (especialidade do médico), `"internamento"` e `"unidade de saude"`.
+
+> **Atenção: Arquivos grandes**
+>
+> Cada arquivo publicado tem cerca de **480 MB** e cobre **três meses**. A primeira consulta de um ano inteiro baixa quatro arquivos. O pacote guarda cada mês no cache, só com as colunas usadas, e as consultas seguintes ficam rápidas. Comece com poucos meses (`meses = 1:3`).
+
+Nos meses de junho a agosto de 2026, foram 1,24 milhão de atendimentos de residentes, e 99,9% foram ligados a um dos 75 bairros oficiais de Curitiba.
+
+## Chamados do SAMU no Recife
+
+O SAMU 192 do Recife atende a região metropolitana. A Prefeitura publica cada solicitação com o **município e o bairro onde aconteceu a ocorrência**.
+
+```r
+samu_bairro("Recife", 2024)
+
+# Só causas externas, abertas por subtipo (acidente de moto, queda...)
+ext <- samu_bairro("Recife", 2024, tipo = "causas externas", por = "subtipo")
+
+# Outros municípios atendidos
+samu_bairro("Olinda", 2023:2024)
+samu_bairro("Jaboatão dos Guararapes", 2024)
+```
+
+O `tipo` aceita partes do nome do tipo de ocorrência: `"causas externas"`, `"psiquiatrica"`, `"cardiologica"`, `"respiratoria"`... O `por` aceita `"tipo"`, `"subtipo"`, `"sexo"`, `"origem do chamado"`, `"motivo de finalizacao"` e `"desfecho"`.
+
+> **Nota: Local da ocorrência, não residência**
+>
+> Um acidente de trânsito em Boa Viagem conta para Boa Viagem, mesmo que a vítima more em outro bairro. As solicitações marcadas como duplicadas são descartadas. Os arquivos de 2011 a 2015 não trazem o município, por isso a função começa em 2016.
+
+## Estabelecimentos de saúde (CNES), em qualquer município
+
+O cadastro nacional do CNES traz todos os estabelecimentos de saúde do país, com CEP, bairro e coordenadas. O pacote conta os **estabelecimentos ativos** por bairro.
+
+```r
+# Unidades básicas de saúde no Recife
+ubs <- estabelecimentos_bairro("Recife", tipo = "unidade basica")
+
+# Tudo o que atende pelo SUS em Belo Horizonte, aberto por tipo
+estabelecimentos_bairro("Belo Horizonte", por = "tipo", so_sus = TRUE)
+
+# Hospitais em todo o estado do RJ
+estabelecimentos_bairro(uf = "RJ", tipo = "hospital")
+
+# A lista dos estabelecimentos, com nome, tipo, CEP e coordenadas
+head(attr(ubs, "registros"))
+```
+
+O `tipo` aceita partes do nome oficial do tipo de unidade: `"hospital"`, `"unidade basica"`, `"pronto atendimento"`, `"psicossocial"` (CAPS), `"farmacia"`... Os nomes vêm da API de dados abertos do Ministério da Saúde.
+
+> **Dica: Oferta de serviços**
+>
+> Esta função mede **onde estão os serviços**, não onde moram os pacientes. Ela serve, por exemplo, para comparar a oferta de unidades básicas com a população de cada bairro: a taxa da tabela é de estabelecimentos por 10 mil habitantes.
+
+`so_sus = TRUE` conta só os estabelecimentos com atendimento **ambulatorial** pelo SUS. Um hospital que atende o SUS só em internação fica de fora.
+
+**Voltar ao início:** [Instalação e primeira tabela](primeiros-passos.html)

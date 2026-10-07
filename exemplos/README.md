@@ -19,7 +19,6 @@ Cada script mostra uma funcionalidade, com comentários. Todos terminam com uma 
 
 ```r
 # 1. Instale o pacote (uma vez)
-remotes::install_github("rfsaldanha/microdatasus")
 remotes::install_github("Hendesson/localdatasus")
 
 # 2. No RStudio, abra exemplos/testar_tudo.R,

@@ -1,0 +1,100 @@
+url: https://hendesson.github.io/localdatasus/
+
+lang: pt
+
+template:
+  bootstrap: 5
+  bootswatch: cosmo
+  bslib:
+    primary: "#b2182b"
+
+home:
+  title: "localdatasus: dados de saúde do SUS por bairro"
+  description: >
+    Óbitos, nascimentos, agravos, internações, atendimentos, SAMU e
+    estabelecimentos de saúde por bairro, com população, taxas e mapas.
+  sidebar:
+    structure: [links, license, community, citation, authors, dev]
+
+authors:
+  Hendesson Alves:
+    href: https://hendesson.github.io
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, autor, github]
+  components:
+    reference:
+      text: Funções
+      href: reference/index.html
+    news:
+      text: Novidades
+      href: news/index.html
+    autor:
+      text: Autor
+      href: https://hendesson.github.io
+
+reference:
+  - title: "Comece por aqui"
+    desc: "O que existe por bairro, onde, e o que fazer quando algo dá errado."
+    contents:
+      - onde_tem_bairro
+      - ajuda
+      - localdatasus-package
+  - title: "Óbitos, nascimentos e agravos"
+    desc: "Contagens por bairro (ou distrito), com população, taxa e coordenadas."
+    contents:
+      - obitos_bairro
+      - nascimentos_bairro
+      - agravos_bairro
+  - title: "Internações, atendimentos, SAMU e estabelecimentos"
+    contents:
+      - internacoes_bairro
+      - atendimentos_bairro
+      - samu_bairro
+      - estabelecimentos_bairro
+  - title: "Mapas"
+    contents:
+      - mapa_bairro
+      - mapa_interativo
+  - title: "Microdados com CEP"
+    desc: "Registros individuais localizados por bairro pelo CEP (CNEFE 2022)."
+    contents:
+      - baixar_bairro
+      - adicionar_bairro
+      - agregar_bairro
+      - sih_bairro
+      - sistemas_bairro
+      - cep_bairro
+  - title: "TabNets regionais"
+    desc: "Consulta direta aos tabuladores das secretarias de saúde."
+    contents:
+      - tabnet_bairro
+      - tabnet_opcoes
+      - fontes_tabnet
+  - title: "IBGE e ligação de nomes"
+    contents:
+      - ligar_bairros
+      - populacao_bairro
+      - distritos_censo
+  - title: "Utilitários"
+    contents:
+      - cnes_coordenadas
+      - limpar_cache
+
+articles:
+  - title: "Tutoriais"
+    navbar: ~
+    contents:
+      - articles/primeiros-passos
+      - articles/obitos-nascimentos-agravos
+      - articles/mapas
+      - articles/internacoes-e-cep
+      - articles/atendimentos-samu-estabelecimentos
+      - articles/exemplos-por-cid
+  - title: "Por dentro do pacote"
+    navbar: "Por dentro do pacote"
+    contents:
+      - articles/como-funciona
+      - articles/erros-e-ajuda

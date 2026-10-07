@@ -1,0 +1,66 @@
+---
+title: "Como o pacote funciona"
+description: "De onde vêm os dados, como os nomes viram bairros do IBGE e quais são as limitações."
+---
+
+## Três caminhos até o bairro
+
+Os dados chegam ao bairro do IBGE por três caminhos:
+
+- **Microdados com CEP** (SIH, APACs, SINASC-RJ): CEP → CNEFE 2022 → bairro do IBGE.
+- **TabNets regionais** (Rio, SES-RJ, São Paulo, Fortaleza, SC): nome do bairro → ligação de nomes → bairro do IBGE.
+- **Dados abertos** (Recife, Curitiba): nome e CEP → ligação de nomes → bairro do IBGE.
+
+Depois, cada bairro recebe a população do Censo 2022, a taxa por 10 mil habitantes, as coordenadas e os contornos.
+
+### 1. Pelo CEP
+
+O **CNEFE 2022** do IBGE tem todos os endereços do Censo, com CEP, coordenadas e setor censitário. O pacote:
+
+1. dá a cada endereço o seu **bairro oficial** (pelo setor censitário). Nos municípios sem bairros oficiais, usa a **localidade** escrita no endereço;
+2. dá a cada **CEP** o bairro onde está a maioria dos seus endereços;
+3. descarta CEPs que não indicam um lugar: genéricos, especiais, que cobrem vários bairros (veja o [tutorial 4](internacoes-e-cep.html)).
+
+As coordenadas do CEP e do bairro são a **mediana** das coordenadas dos seus endereços.
+
+### 2. Pelos TabNets
+
+Algumas secretarias publicam tabulações por bairro nos seus TabNets. O pacote preenche o formulário do site, como uma pessoa faria, e lê a tabela de resposta.
+
+| Fonte | Abrangência | Unidade |
+|---|---|---|
+| Prefeitura do Rio (SMS-Rio) | Rio de Janeiro, desde 2006 | bairro |
+| Secretaria Estadual do RJ (SES-RJ) | todos os municípios do RJ, bairro desde 2011 | bairro |
+| Prefeitura de São Paulo | São Paulo | distrito (96) |
+| DIVE-SC | todos os municípios de SC | bairro |
+| Prefeitura de Fortaleza | Fortaleza, desde 1999 | bairro |
+
+Além dos TabNets, algumas prefeituras publicam **dados abertos** com o bairro: arboviroses e SAMU do Recife e atendimentos médicos de Curitiba (veja o [tutorial 8](atendimentos-samu-estabelecimentos.html)).
+
+Levantamento de outubro de 2026 nos TabNets das 27 UFs e das capitais. A maioria vai só até o município.
+
+### 3. Ligação de nomes
+
+O TabNet traz só o **nome** do bairro, escrito à sua maneira ("FREGUESIA-ILHA", "Jd. América"). O pacote compara o nome com os bairros do IBGE **dentro do mesmo município**, nesta ordem:
+
+| Etapa | Exemplo |
+|---|---|
+| nome idêntico, sem acentos, abreviações e preposições | "Jd. América" → Jardim América |
+| sem a numeração final | "Santa Rosa II" → Santa Rosa |
+| um nome contém o outro | "COMPLEXO DA MARE" → Maré |
+| o mais parecido (até 15% de diferença) | "Cavalcante" → Cavalcanti |
+
+A coluna `ligacao` diz qual etapa foi usada. Os nomes que não casam ficam como `não encontrado`, e "Ignorado"/"Em branco" ficam como `ignorado`. Nada é descartado em silêncio. Em 2023, **99,8%** dos óbitos do Rio foram ligados.
+
+Você pode usar a mesma ligação com qualquer lista de nomes:
+
+```r
+ligar_bairros(c("Jd. América", "COMPLEXO DA MARE"), "330455", "RJ")
+```
+
+## Limitações
+
+- **Só o que é público:** a maioria dos lugares não publica dados por bairro.
+- **TabNets mudam:** os sites podem sair do ar ou mudar o formulário. O pacote tenta 3 vezes e guarda em cache o que já deu certo.
+- **População de 2022:** as taxas usam a população do Censo 2022 e são brutas, sem padronização por idade.
+- **Registros sem bairro:** registros sem CEP utilizável ficam fora do numerador. A taxa real pode ser maior.

@@ -1,0 +1,85 @@
+---
+title: "Mapas"
+description: "Mapas prontos com uma linha: estáticos para artigos e interativos para explorar."
+---
+
+Os mapas precisam de três pacotes, instalados uma vez:
+
+```r
+install.packages(c("sf", "ggplot2", "leaflet"))
+```
+
+## Mapa estático
+
+```r
+library(localdatasus)
+
+circ <- obitos_bairro("Rio de Janeiro", 2023, cid = "I")
+mapa_bairro(circ, titulo = "Óbitos por doenças circulatórias, Rio de Janeiro, 2023")
+```
+
+![Mapa da taxa de óbitos por doenças circulatórias por bairro, Rio de Janeiro, 2023](figuras/mapa-circulatorio-rio.png)
+
+- **Cor:** por padrão, o mapa é pintado pela **taxa por 10 mil habitantes**.
+- **Contornos:** são os oficiais do IBGE (Censo 2022), baixados uma vez por estado.
+- **Cinza:** bairros sem dado.
+
+### Escolher o que pintar e as cores
+
+```r
+mapa_bairro(circ, valor = "obitos")             # pinta pela contagem
+mapa_bairro(circ, cores = "Blues")              # outras paletas: "YlOrRd", "Greens", "Purples"...
+```
+
+### Painéis automáticos
+
+Se a tabela tiver um `por` (ou vários anos), o mapa é dividido em painéis:
+
+```r
+por_sexo <- obitos_bairro("Rio de Janeiro", 2023, cid = "I", por = "sexo")
+mapa_bairro(subset(por_sexo, sexo != "Ignorado"))
+```
+
+![Mapas lado a lado da taxa de óbitos por sexo, por bairro, Rio de Janeiro](figuras/mapa-sexo-rio.png)
+
+### Outros lugares
+
+::: {layout-ncol=2}
+![Óbitos por distrito, São Paulo, 2023](figuras/mapa-distritos-sp.png)
+
+![Dengue por bairro, Joinville, 2024](figuras/mapa-dengue-joinville.png)
+:::
+
+```r
+mapa_bairro(obitos_bairro("São Paulo", 2023), cores = "Blues")
+mapa_bairro(agravos_bairro("dengue", "Joinville", 2024))
+```
+
+### Ajustar e salvar
+
+`mapa_bairro()` devolve um gráfico **ggplot2** comum:
+
+```r
+library(ggplot2)
+mapa <- mapa_bairro(circ) + labs(subtitle = "Fonte: SMS-Rio")
+ggsave("mapa.png", mapa, width = 8, height = 5, dpi = 300)
+```
+
+## Mapa interativo
+
+```r
+mapa_interativo(agravos_bairro("dengue", "Rio de Janeiro", 2024))
+```
+
+O mapa abre no *Viewer* do RStudio, com um mapa de ruas ao fundo. Passe o mouse sobre um bairro para ver o nome, ou clique para ver casos, taxa e população. Para salvar como página web:
+
+```r
+m <- mapa_interativo(circ)
+htmlwidgets::saveWidget(m, "mapa.html")
+```
+
+## No QGIS
+
+Toda tabela tem `lat` e `lon`. No QGIS, use *Camada → Adicionar camada → Texto delimitado*, com X = `lon` e Y = `lat`. Para os polígonos, use `codigo_ibge` para juntar com a malha de bairros do IBGE.
+
+**Próximo:** [4. Internações e microdados com CEP](internacoes-e-cep.html)

@@ -1,0 +1,97 @@
+---
+title: "Um exemplo para cada capítulo da CID"
+description: "Óbitos (SIM) e internações (SIH) por bairro para cada capítulo da CID-10, em lugares de todas as regiões."
+---
+
+Esta página traz um exemplo pronto para **cada capítulo da CID-10**, em óbitos e em internações, variando o lugar. Copie o exemplo do capítulo que você precisa e troque o município e o ano.
+
+> **Nota: Como escrever a causa**
+>
+> - **Uma letra** pega o capítulo inteiro: `cid = "I"`.
+> - **Intervalo** pega parte de uma letra: `cid = "D50-D89"`. O intervalo precisa ficar dentro da mesma letra.
+> - **Vários** de uma vez: `cid = c("A", "B")`.
+
+## Óbitos por bairro (SIM)
+
+Os óbitos por bairro existem no **Estado do Rio de Janeiro**, em todos os 92 municípios, e na **cidade de São Paulo**, por distrito. Por isso os exemplos passam pelas regiões de saúde do RJ e pela capital paulista.
+
+| Capítulo | Causa | Exemplo | Lugar |
+|---|---|---|---|
+| I | Infecciosas e parasitárias | `obitos_bairro("Rio de Janeiro", 2023, cid = c("A", "B"))` | Capital do RJ |
+| II | Neoplasias (câncer) | `obitos_bairro("São Paulo", 2023, cid = "C")` | Capital de SP, por distrito |
+| III | Sangue e imunidade | `obitos_bairro("Niterói", 2023, cid = "D50-D89")` | Metropolitana II (RJ) |
+| IV | Endócrinas e metabólicas (diabetes) | `obitos_bairro("Duque de Caxias", 2023, cid = "E")` | Metropolitana I (RJ) |
+| V | Transtornos mentais | `obitos_bairro("Campos dos Goytacazes", 2023, cid = "F")` | Norte (RJ) |
+| VI | Sistema nervoso | `obitos_bairro("Petrópolis", 2023, cid = "G")` | Serrana (RJ) |
+| VII | Olho | `obitos_bairro("São Paulo", 2019:2023, cid = "H00-H59")` | Capital de SP |
+| VIII | Ouvido | `obitos_bairro("Rio de Janeiro", 2019:2023, cid = "H60-H95")` | Capital do RJ |
+| IX | Aparelho circulatório | `obitos_bairro("Volta Redonda", 2023, cid = "I")` | Médio Paraíba (RJ) |
+| X | Aparelho respiratório | `obitos_bairro("Cabo Frio", 2023, cid = "J")` | Baixadas Litorâneas (RJ) |
+| XI | Aparelho digestivo | `obitos_bairro("Angra dos Reis", 2023, cid = "K")` | Baía da Ilha Grande (RJ) |
+| XII | Pele | `obitos_bairro("Itaperuna", 2023, cid = "L")` | Noroeste (RJ) |
+| XIII | Osteomuscular | `obitos_bairro("Três Rios", 2019:2023, cid = "M")` | Centro-Sul (RJ) |
+| XIV | Geniturinário (rins) | `obitos_bairro("São Gonçalo", 2023, cid = "N")` | Metropolitana II (RJ) |
+| XV | Gravidez, parto e puerpério (mortes maternas) | `obitos_bairro("Nova Iguaçu", 2019:2023, cid = "O")` | Metropolitana I (RJ) |
+| XVI | Período perinatal | `obitos_bairro("São Paulo", 2023, cid = "P")` | Capital de SP |
+| XVII | Malformações congênitas | `obitos_bairro("Rio de Janeiro", 2023, cid = "Q")` | Capital do RJ |
+| XVIII | Sintomas e causas mal definidas | `obitos_bairro("Macaé", 2023, cid = "R")` | Norte (RJ) |
+| XX | Causas externas (acidentes, homicídios, suicídios) | `obitos_bairro("Belford Roxo", 2023, cid = c("V", "W", "X", "Y"))` | Metropolitana I (RJ) |
+| — | COVID-19 | `obitos_bairro("Rio de Janeiro", 2021, cid = "B34")` | Capital do RJ |
+
+> **Dica: Por que faltam alguns capítulos?**
+>
+> No SIM, a causa do óbito é a **causa básica**. Lesões (capítulo XIX, letras S e T) e contatos com serviços de saúde (capítulo XXI, Z) não são usados como causa básica. Para lesões, use as causas externas (V a Y). A **COVID-19** foi registrada no SIM com o código B34.2, e não no capítulo U, e por isso o exemplo usa `cid = "B34"`.
+
+Em capítulos com poucos óbitos, como olho, ouvido, pele e osteomuscular, junte vários anos (`2019:2023`) para ter números mais estáveis.
+
+Para abrir qualquer exemplo por sexo, acrescente `por = "sexo"`:
+
+```r
+obitos_bairro("Volta Redonda", 2023, cid = "I", por = "sexo")
+```
+
+## Internações por bairro (SIH)
+
+As internações chegam ao bairro pelo **CEP do paciente**, em **qualquer município do país**. Por isso os exemplos passam pelas cinco regiões. Informe sempre a UF.
+
+| Capítulo | Causa | Exemplo | Região |
+|---|---|---|---|
+| I | Infecciosas e parasitárias | `internacoes_bairro("Manaus", 2023, cid = c("A", "B"), uf = "AM")` | Norte |
+| II | Neoplasias | `internacoes_bairro("Porto Alegre", 2023, cid = c("C", "D00-D48"), uf = "RS")` | Sul |
+| III | Sangue e imunidade | `internacoes_bairro("Teresina", 2023, cid = "D50-D89", uf = "PI")` | Nordeste |
+| IV | Endócrinas e metabólicas | `internacoes_bairro("Campo Grande", 2023, cid = "E", uf = "MS")` | Centro-Oeste |
+| V | Transtornos mentais | `internacoes_bairro("Belo Horizonte", 2023, cid = "F", uf = "MG")` | Sudeste |
+| VI | Sistema nervoso | `internacoes_bairro("Florianópolis", 2023, cid = "G", uf = "SC")` | Sul |
+| VII | Olho | `internacoes_bairro("Natal", 2023, cid = "H00-H59", uf = "RN")` | Nordeste |
+| VIII | Ouvido | `internacoes_bairro("Vitória", 2023, cid = "H60-H95", uf = "ES")` | Sudeste |
+| IX | Aparelho circulatório | `internacoes_bairro("Recife", 2023, cid = "I", uf = "PE")` | Nordeste |
+| X | Aparelho respiratório | `internacoes_bairro("Curitiba", 2023, cid = "J", uf = "PR")` | Sul |
+| XI | Aparelho digestivo | `internacoes_bairro("Belém", 2023, cid = "K", uf = "PA")` | Norte |
+| XII | Pele | `internacoes_bairro("Cuiabá", 2023, cid = "L", uf = "MT")` | Centro-Oeste |
+| XIII | Osteomuscular | `internacoes_bairro("Juiz de Fora", 2023, cid = "M", uf = "MG")` | Sudeste |
+| XIV | Geniturinário | `internacoes_bairro("Fortaleza", 2023, cid = "N", uf = "CE")` | Nordeste |
+| XV | Gravidez, parto e puerpério | `internacoes_bairro("Macapá", 2023, cid = "O", uf = "AP")` | Norte |
+| XVI | Período perinatal | `internacoes_bairro("Salvador", 2023, cid = "P", uf = "BA")` | Nordeste |
+| XVII | Malformações congênitas | `internacoes_bairro("Ribeirão Preto", 2023, cid = "Q", uf = "SP")` | Sudeste |
+| XVIII | Sintomas mal definidos | `internacoes_bairro("Maceió", 2023, cid = "R", uf = "AL")` | Nordeste |
+| XIX | Lesões e envenenamentos (fraturas, queimaduras) | `internacoes_bairro("João Pessoa", 2023, cid = c("S", "T"), uf = "PB")` | Nordeste |
+| XXI | Contatos com serviços de saúde | `internacoes_bairro("Londrina", 2023, cid = "Z", uf = "PR")` | Sul |
+
+> **Dica: Diferenças em relação ao SIM**
+>
+> - No SIH vale o **diagnóstico principal** da internação. Por isso aparecem as lesões (capítulo XIX, S e T) e os contatos com serviços de saúde (capítulo XXI, Z).
+> - As causas externas (V a Y) entram como diagnóstico secundário e não aparecem aqui.
+> - No capítulo II, `c("C", "D00-D48")` junta as neoplasias malignas (C) com as benignas e *in situ* (D00 a D48). A letra D sozinha pegaria também as doenças do sangue.
+
+> **Atenção: Demora**
+>
+> Cada chamada baixa as internações da UF inteira no DATASUS, então a primeira consulta de cada estado pode levar de 10 a 30 minutos. Para várias causas no mesmo estado, peça todas de uma vez e separe depois pela coluna `grupo`:
+>
+> ```r
+> pe <- internacoes_bairro("Recife", 2023, cid = c("I", "J", "N"), uf = "PE")
+> aggregate(internacoes ~ grupo, data = pe, FUN = sum)   # total de cada causa
+> ```
+
+Em todo resultado de internações, `attr(x, "cobertura")` mostra quantas ganharam bairro e o motivo das que não ganharam (veja o [tutorial 4](internacoes-e-cep.html)).
+
+**Próximo:** [8. Atendimentos, SAMU e estabelecimentos](atendimentos-samu-estabelecimentos.html)

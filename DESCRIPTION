@@ -23,7 +23,7 @@ Description: Retrieves health data from Brazil's Unified Health System
     2022 Census tracts, with quality rules for generic postal codes.
     Function names, arguments, messages and documentation are in
     Portuguese, aimed at Brazilian health researchers.
-URL: https://github.com/Hendesson/localdatasus, https://hendesson.github.io/projetos/localdatasus/
+URL: https://hendesson.github.io/localdatasus/, https://github.com/Hendesson/localdatasus
 BugReports: https://github.com/Hendesson/localdatasus/issues
 License: MIT + file LICENSE
 Encoding: UTF-8

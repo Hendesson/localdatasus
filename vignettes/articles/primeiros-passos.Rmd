@@ -1,0 +1,91 @@
+---
+title: "Instalação e primeira tabela"
+description: "Instalar o pacote, ver que dados existem e baixar a primeira tabela de óbitos por bairro."
+---
+
+## O que você vai precisar
+
+- **R** (4.1 ou mais recente) e, de preferência, o **RStudio**.
+- Internet. Na primeira vez, o pacote baixa tabelas do IBGE (cerca de 340 MB para o RJ). Depois elas ficam guardadas no computador.
+
+## 1. Instalar
+
+```r
+install.packages("remotes")
+remotes::install_github("Hendesson/localdatasus")
+
+# Para os mapas (opcional):
+install.packages(c("sf", "ggplot2", "leaflet"))
+```
+
+Depois de instalar, **reinicie o R** (no RStudio: *Session → Restart R*).
+
+## 2. Ver o que existe
+
+Nem todo lugar tem dados por bairro: só algumas secretarias de saúde publicam. Comece perguntando ao pacote:
+
+```r
+library(localdatasus)
+onde_tem_bairro()
+```
+
+A tabela mostra cada **dado** (óbitos, nascimentos, dengue, tuberculose...), o **local**, a **unidade** (bairro ou distrito) e a **função** que busca. Em resumo:
+
+| Onde | Óbitos | Nascimentos | Agravos (SINAN) | Internações | Outros |
+|---|---|---|---|---|---|
+| Rio de Janeiro (capital) | ✔ desde 2006 | ✔ | ✔ 15 agravos | ✔ | |
+| Demais municípios do RJ | ✔ bairro desde 2011 | ✔ (com CEP) | — | ✔ | |
+| São Paulo (capital) | ✔ por distrito | ✔ | ✔ 5 agravos | ✔ | |
+| Fortaleza | ✔ desde 1999 | ✔ | — | ✔ | |
+| Recife | — | — | ✔ dengue, chikungunya, zika | ✔ | SAMU |
+| Curitiba | — | — | — | ✔ | atendimentos médicos (e-Saúde) |
+| Santa Catarina | — | — | ✔ 6 agravos | ✔ | |
+| Outros estados | — | — | — | ✔ (pelo CEP) | |
+
+Em **todos os municípios** também dá para contar os **estabelecimentos de saúde** (CNES) por bairro.
+
+## 3. A primeira tabela
+
+Óbitos por **doenças do aparelho circulatório** (capítulo IX da CID-10, que começa com a letra **I**) nos bairros do Rio, em 2023:
+
+```r
+circ <- obitos_bairro("Rio de Janeiro", 2023, cid = "I")
+#> Pronto: 15.502 obitos em 160 bairros; 99,8% ligados a um bairro do IBGE.
+
+head(circ)
+```
+
+Cada linha é um bairro:
+
+| coluna | o que é |
+|---|---|
+| `ano`, `municipio` | ano e município |
+| `bairro` | nome oficial do bairro no IBGE |
+| `bairro_no_site` | como o bairro aparece na fonte original |
+| `obitos` | número de óbitos |
+| `populacao` | população do bairro (Censo 2022) |
+| `taxa_por_10mil` | óbitos por 10 mil habitantes |
+| `lat`, `lon` | coordenadas do bairro (para mapas) |
+| `codigo_ibge` | código oficial do bairro |
+| `ligacao` | como o nome foi ligado ao IBGE (`exata`, `parcial`...) |
+| `fonte` | de onde veio o dado |
+
+## 4. Ordenar e salvar
+
+```r
+# Bairros com maior taxa
+circ[order(-circ$taxa_por_10mil), c("bairro", "obitos", "taxa_por_10mil")][1:10, ]
+
+# Salvar em CSV (abre no Excel, no QGIS...)
+write.csv(circ, "obitos_circulatorio_rio_2023.csv", row.names = FALSE)
+```
+
+> **Dica: Escreva do seu jeito**
+>
+> O nome do município aceita maiúsculas e minúsculas, com ou sem acento: `"rio de janeiro"`, `"Niteroi"`. Também pode ser o código IBGE: `"330455"`.
+
+> **Nota: Os dados ficam guardados**
+>
+> Na segunda vez, a mesma consulta leva segundos: o pacote guarda tudo em cache. Para apagar o cache, use `limpar_cache()`.
+
+**Próximo:** [2. Óbitos, nascimentos e agravos](obitos-nascimentos-agravos.html)

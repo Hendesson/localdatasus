@@ -52,8 +52,8 @@ Estatísticos, CNEFE, usado na ligação entre CEP e bairro.)
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://hendesson.github.io/localdatasus/}
   \item \url{https://github.com/Hendesson/localdatasus}
-  \item \url{https://hendesson.github.io/projetos/localdatasus/}
   \item Report bugs at \url{https://github.com/Hendesson/localdatasus/issues}
 }
 
