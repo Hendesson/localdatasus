@@ -13,6 +13,27 @@ Cada bairro é ligado ao bairro oficial do IBGE, com população do Censo 2022 e
 
 **Documentação completa, com tutoriais:** <https://hendesson.github.io/localdatasus/>
 
+## Mapas por bairro
+
+Cada tabela do pacote vira um mapa com uma linha, `mapa_bairro()`, sobre os contornos oficiais de bairros e distritos do IBGE (Censo 2022). Alguns exemplos, cada um de uma fonte diferente:
+
+<p align="center">
+<img src="man/figures/mapa-rio.png" width="32%" alt="Mapa: óbitos por doenças circulatórias por bairro, Rio de Janeiro, 2023"/>
+<img src="man/figures/mapa-sp.png" width="32%" alt="Mapa: óbitos por doenças circulatórias por distrito, São Paulo, 2023"/>
+<img src="man/figures/mapa-fortaleza.png" width="32%" alt="Mapa: nascidos vivos por bairro, Fortaleza, 2023"/>
+<img src="man/figures/mapa-recife.png" width="32%" alt="Mapa: casos notificados de dengue por bairro, Recife, 2024"/>
+<img src="man/figures/mapa-curitiba.png" width="32%" alt="Mapa: atendimentos por doenças respiratórias por bairro, Curitiba, 2026"/>
+<img src="man/figures/mapa-samu.png" width="32%" alt="Mapa: chamados do SAMU por causas externas por bairro, Recife, 2024"/>
+</p>
+
+```r
+circ <- obitos_bairro("Rio de Janeiro", 2023, cid = "I")
+mapa_bairro(circ)        # mapa estático (ggplot2), pronto para artigo
+mapa_interativo(circ)    # mapa interativo (leaflet), para explorar
+```
+
+Taxas por 10 mil habitantes, com a população do Censo 2022. Os mapas são gerados pelo script [`data-raw/galeria.R`](https://github.com/Hendesson/localdatasus/blob/main/data-raw/galeria.R).
+
 ## Instalação
 
 ```r

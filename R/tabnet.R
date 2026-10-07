@@ -268,7 +268,12 @@ tn_consultar_cache <- function(cfg, form, ano, coluna, incremento, filtros) {
   dir.create(pasta, showWarnings = FALSE, recursive = TRUE)
   arq <- file.path(pasta, paste0(unname(tools::md5sum(tmp)), ".rds"))
   unlink(tmp)
-  if (file.exists(arq)) return(readRDS(arq))
+  if (file.exists(arq)) {
+    r <- readRDS(arq)
+    # Cache de vers\u00f5es antigas: a coluna de abertura se chamava "coluna".
+    if (!"categoria" %in% names(r) && "coluna" %in% names(r)) names(r)[names(r) == "coluna"] <- "categoria"
+    return(r)
+  }
   if (vazio(cfg$filtro_ano)) {
     periodos <- ano
   } else {
