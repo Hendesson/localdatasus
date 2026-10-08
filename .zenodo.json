@@ -1,0 +1,39 @@
+{
+  "title": "localdatasus: dados de saúde do SUS por bairro",
+  "upload_type": "software",
+  "description": "<p>Pacote R que entrega dados de saúde do Sistema Único de Saúde (SUS) por bairro, em todo o Brasil: óbitos, nascimentos, agravos de notificação, internações, atendimentos, chamados do SAMU e estabelecimentos de saúde, com população do Censo 2022, taxas por 10 mil habitantes, coordenadas e mapas. As fontes são escolhidas automaticamente: microdados com o CEP do paciente (obtidos com o pacote microdatasus), arquivos e dados abertos de secretarias de saúde e TabNets regionais. CEPs e nomes de bairro são ligados aos bairros oficiais do IBGE pelo Cadastro Nacional de Endereços para Fins Estatísticos (CNEFE) e pelos setores do Censo 2022.</p><p>Documentação: <a href=\"https://hendesson.github.io/localdatasus/\">https://hendesson.github.io/localdatasus/</a></p>",
+  "creators": [
+    {
+      "name": "Alves, Hendesson",
+      "affiliation": "Universidade de Brasília (UnB), Laboratório de Geografia, Ambiente e Saúde (LAGAS)",
+      "orcid": "0009-0009-0342-9201"
+    }
+  ],
+  "license": "mit",
+  "language": "por",
+  "keywords": [
+    "R",
+    "SUS",
+    "DATASUS",
+    "saúde pública",
+    "bairro",
+    "epidemiologia espacial",
+    "geografia da saúde",
+    "CEP",
+    "CNEFE",
+    "TabNet",
+    "Brasil"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://hendesson.github.io/localdatasus/",
+      "relation": "isDocumentedBy",
+      "resource_type": "publication-softwaredocumentation"
+    },
+    {
+      "identifier": "10.1590/0102-311x00032419",
+      "relation": "requires",
+      "scheme": "doi"
+    }
+  ]
+}
