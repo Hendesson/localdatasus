@@ -1,13 +1,14 @@
 bibentry(
   bibtype  = "Manual",
-  title    = "localdatasus: Dados de Saúde do SUS por Bairro (Escala Local)",
-  author   = person(given = "Hendesson", family = "Alves"),
+  title    = "localdatasus: dados de saúde do SUS por bairro",
+  author   = person(given = "Hendesson", family = "Alves",
+                    comment = c(ORCID = "0009-0009-0342-9201")),
   year     = "2026",
   note     = paste("Pacote R, versão", meta$Version),
-  url      = "https://github.com/Hendesson/localdatasus",
+  doi      = "10.5281/zenodo.23244742",
+  url      = "https://hendesson.github.io/localdatasus/",
   textVersion = paste0(
-    "Alves, Hendesson (2026). localdatasus: Dados de Saúde do SUS por Bairro ",
-    "(Escala Local). Pacote R, versão ", meta$Version,
-    ". https://github.com/Hendesson/localdatasus"
+    "Alves, Hendesson (2026). localdatasus: dados de saúde do SUS por bairro. ",
+    "Pacote R, versão ", meta$Version, ". https://doi.org/10.5281/zenodo.23244742"
   )
 )

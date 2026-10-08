@@ -1,5 +1,10 @@
 # localdatasus <img src="man/figures/logo.png" align="right" height="139" alt="logo do localdatasus" />
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/Hendesson/localdatasus/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Hendesson/localdatasus/actions/workflows/R-CMD-check.yaml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23244742.svg)](https://doi.org/10.5281/zenodo.23244742)
+<!-- badges: end -->
+
 Dados de saúde do SUS **por bairro**, em R, com população, taxas e coordenadas.
 
 O [microdatasus](https://CRAN.R-project.org/package=microdatasus) traz os dados do SUS por **município**. O `localdatasus` desce ao **bairro**. Ele junta quatro tipos de fonte:
@@ -317,7 +322,9 @@ Os arquivos ficam em `tools::R_user_dir("localdatasus", "cache")`, e há duas fo
 
 ## Como citar
 
-> Alves, Hendesson (2026). *localdatasus: Dados de Saúde do SUS por Bairro (Escala Local)*. Pacote R. <https://github.com/Hendesson/localdatasus>
+> Alves, Hendesson (2026). *localdatasus: dados de saúde do SUS por bairro*. Pacote R. <https://doi.org/10.5281/zenodo.23244742>
+
+O DOI acima vale para todas as versões. Cada versão tem também o seu próprio DOI, listado na [página do Zenodo](https://doi.org/10.5281/zenodo.23244742).
 
 No R, `citation("localdatasus")` mostra a citação com a versão instalada e a entrada BibTeX.
 
