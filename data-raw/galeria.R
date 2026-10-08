@@ -13,8 +13,8 @@ tema <- theme(
   legend.title = element_text(size = 8), legend.text = element_text(size = 7),
   legend.key.height = unit(0.35, "cm"), legend.key.width = unit(0.3, "cm")
 )
-mapa <- function(dados, titulo, subtitulo, cores = "Reds") {
-  mapa_bairro(dados, cores = cores) +
+mapa <- function(dados, titulo, subtitulo, cores = "Reds", ...) {
+  mapa_bairro(dados, cores = cores, ...) +
     labs(title = titulo, subtitle = subtitulo) + tema
 }
 
@@ -30,9 +30,10 @@ mapas <- list(
   "mapa-rio"       = mapa(rio, "Rio de Janeiro", "\u00d3bitos por doen\u00e7as circulat\u00f3rias, 2023"),
   "mapa-sp"        = mapa(sp, "S\u00e3o Paulo", "\u00d3bitos por doen\u00e7as circulat\u00f3rias, 2023\n(por distrito)", "Oranges"),
   "mapa-fortaleza" = mapa(fortaleza, "Fortaleza", "Nascidos vivos, 2023", "Blues"),
-  "mapa-recife"    = mapa(recife, "Recife", "Dengue, casos notificados, 2024", "Greens"),
+  "mapa-recife"    = mapa(recife, "Recife", "Dengue, casos notificados, 2024\n(taxa suavizada)", "Greens", suavizar = TRUE),
   "mapa-curitiba"  = mapa(curitiba, "Curitiba", "Atendimentos por doen\u00e7as respirat\u00f3rias\n(e-Sa\u00fade), jun. a ago. 2026", "Purples"),
-  "mapa-samu"      = mapa(samu, "Recife", "Chamados do SAMU por causas externas, 2024", "YlOrBr")
+  "mapa-samu"      = mapa(samu, "Recife", "Chamados do SAMU por causas externas, 2024\n(n\u00famero de chamados, pelo local da ocorr\u00eancia)", "YlOrBr",
+                          valor = "chamados")
 )
 for (nome in names(mapas)) {
   ggsave(file.path("man/figures", paste0(nome, ".png")), mapas[[nome]],

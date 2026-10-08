@@ -48,11 +48,15 @@ malha_ibge <- function(uf, unidade = c("bairro", "distrito")) {
                     "obitos", "nascimentos", "casos", "internacoes", "obitos_hosp", "n",
                     "populacao", "taxa_por_10mil", "taxa_10mil", "lat", "lon", "codigo_ibge",
                     "ligacao", "fonte", "codmun", "id_bairro", "fonte_bairro", "cd_bairro_ibge",
-                    "lat_bairro", "lon_bairro", "suprimido", "codmun_paciente")
+                    "lat_bairro", "lon_bairro", "suprimido", "codmun_paciente",
+                    "atendimentos", "chamados", "estabelecimentos", "taxa_suavizada_por_10mil")
 .rotulos_valor <- c(taxa_por_10mil = "por 10 mil hab.", taxa_10mil = "por 10 mil hab.",
                     obitos = "\u00f3bitos", nascimentos = "nascimentos", casos = "casos",
                     internacoes = "interna\u00e7\u00f5es", obitos_hosp = "\u00f3bitos hospitalares",
-                    n = "registros", populacao = "popula\u00e7\u00e3o")
+                    n = "registros", populacao = "popula\u00e7\u00e3o",
+                    atendimentos = "atendimentos", chamados = "chamados",
+                    estabelecimentos = "estabelecimentos",
+                    taxa_suavizada_por_10mil = "por 10 mil hab.\n(suavizada)")
 
 # Padroniza a tabela para o mapa: código, município, nome, coordenadas,
 # valor a pintar e colunas para dividir em painéis (ano, categoria).
@@ -70,7 +74,7 @@ preparar_mapa <- function(dados, valor) {
   lat <- pega("lat", "lat_bairro")
   if (is.null(codigo) && is.null(lat)) erro("LDS-21", "A tabela n\u00e3o tem c\u00f3digo IBGE nem coordenadas.")
   if (is.null(valor)) {
-    candidatos <- c("taxa_por_10mil", "taxa_10mil", "obitos", "nascimentos", "casos", "internacoes", "n")
+    candidatos <- c("taxa_por_10mil", "taxa_10mil", .colunas_contagem)
     valor <- candidatos[candidatos %in% names(d)][1]
   }
   if (is.na(valor) || !valor %in% names(d)) erro("LDS-17", "Coluna para pintar o mapa n\u00e3o encontrada: ", valor)
@@ -127,16 +131,24 @@ contornos <- function(p) {
 #' @param titulo Título do mapa (opcional).
 #' @param cores Paleta do ColorBrewer, por exemplo `"Reds"` (padrão),
 #'   `"Blues"`, `"YlOrRd"`.
+#' @param suavizar `TRUE` para pintar a taxa suavizada (bayesiano
+#'   empírico, ver [suavizar_taxas()]), recomendada quando há bairros com
+#'   poucos moradores: neles, poucos casos produzem taxas extremas.
 #' @return Um gráfico `ggplot2`.
 #' @export
 #' @examplesIf interactive()
 #' x <- obitos_bairro("Rio de Janeiro", 2023, cid = "I")
 #' mapa_bairro(x)
 #' mapa_bairro(x, valor = "obitos", titulo = "Óbitos por doenças circulatórias, 2023")
+#' mapa_bairro(x, suavizar = TRUE)                                    # taxa suavizada
 #' mapa_bairro(obitos_bairro("Rio de Janeiro", 2023, por = "sexo"))   # um painel por sexo
 #' ggplot2::ggsave("mapa.png", width = 8, height = 6, dpi = 300)
-mapa_bairro <- function(dados, valor = NULL, titulo = NULL, cores = "Reds") {
+mapa_bairro <- function(dados, valor = NULL, titulo = NULL, cores = "Reds", suavizar = FALSE) {
   precisa(c("sf", "ggplot2"))
+  if (suavizar) {
+    dados <- suavizar_taxas(dados)
+    if (is.null(valor)) valor <- "taxa_suavizada_por_10mil"
+  }
   p <- preparar_mapa(dados, valor)
   base <- contornos(p)
   g <- ggplot2::ggplot()
@@ -193,11 +205,15 @@ mapa_bairro <- function(dados, valor = NULL, titulo = NULL, cores = "Reds") {
 #' @examplesIf interactive()
 #' x <- agravos_bairro("dengue", "Rio de Janeiro", 2024)
 #' mapa_interativo(x)
-mapa_interativo <- function(dados, valor = NULL, cores = "Reds") {
+mapa_interativo <- function(dados, valor = NULL, cores = "Reds", suavizar = FALSE) {
   precisa(c("sf", "leaflet"))
+  if (suavizar) {
+    dados <- suavizar_taxas(dados)
+    if (is.null(valor)) valor <- "taxa_suavizada_por_10mil"
+  }
   p <- preparar_mapa(dados, valor)
   d <- data.table::as.data.table(p$original)
-  contagem <- intersect(c("obitos", "nascimentos", "casos", "internacoes", "n"), names(d))[1]
+  contagem <- intersect(.colunas_contagem, names(d))[1]
   if (length(p$paineis) > 0) {
     avisar("LDS-23", "A tabela tem v\u00e1rios ", paste(p$paineis, collapse = " e "),
            "; o mapa mostra a soma.")

@@ -59,6 +59,14 @@ baixar_samu <- function(anos) {
 #' municípios. Fonte: portal de dados abertos da Prefeitura do Recife,
 #' 2016 em diante. As solicitações duplicadas são descartadas.
 #'
+#' @section Taxa por morador:
+#' A coluna `taxa_por_10mil` divide os chamados pela população RESIDENTE
+#' do bairro, mas o SAMU registra o local da ocorrência. Em áreas centrais,
+#' comerciais ou com grandes hospitais, onde muita gente circula e pouca
+#' gente mora (no Recife, por exemplo, Santo Antônio tem 447 moradores),
+#' essa taxa fica artificialmente alta. Para mapas, prefira a contagem:
+#' `mapa_bairro(x, valor = "chamados")`.
+#'
 #' @param municipio Nome do município da ocorrência (padrão: Recife).
 #' @param anos Anos do chamado (2016 em diante).
 #' @param tipo Parte do tipo de ocorrência, por exemplo `"causas externas"`,

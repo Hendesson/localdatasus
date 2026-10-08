@@ -35,9 +35,10 @@ Cada tabela do pacote vira um mapa com uma linha, `mapa_bairro()`, sobre os cont
 circ <- obitos_bairro("Rio de Janeiro", 2023, cid = "I")
 mapa_bairro(circ)        # mapa estático (ggplot2), pronto para artigo
 mapa_interativo(circ)    # mapa interativo (leaflet), para explorar
+mapa_bairro(circ, suavizar = TRUE)   # taxa suavizada, para bairros pouco populosos
 ```
 
-Taxas por 10 mil habitantes, com a população do Censo 2022. Os mapas são gerados pelo script [`data-raw/galeria.R`](https://github.com/Hendesson/localdatasus/blob/main/data-raw/galeria.R).
+Taxas por 10 mil habitantes, com a população do Censo 2022. Em bairros com poucos moradores, poucos casos produzem taxas extremas: use `mapa_bairro(x, suavizar = TRUE)` para a taxa suavizada (bayesiano empírico, `suavizar_taxas()`), como no mapa da dengue no Recife. Nos chamados do SAMU, que registram o local da ocorrência e não a residência, o mapa mostra o número de chamados. Os mapas são gerados pelo script [`data-raw/galeria.R`](https://github.com/Hendesson/localdatasus/blob/main/data-raw/galeria.R).
 
 ## Instalação
 

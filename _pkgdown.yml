@@ -58,6 +58,7 @@ reference:
     contents:
       - mapa_bairro
       - mapa_interativo
+      - suavizar_taxas
   - title: "Microdados com CEP"
     desc: "Registros individuais localizados por bairro pelo CEP (CNEFE 2022)."
     contents:

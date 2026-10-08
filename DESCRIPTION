@@ -1,7 +1,7 @@
 Package: localdatasus
 Type: Package
 Title: Neighborhood-Level Data from Brazil's Unified Health System
-Version: 0.2.0
+Version: 0.2.0.9000
 Authors@R:
     person("Hendesson", "Alves", role = c("aut", "cre"),
            email = "hendesson124@gmail.com",

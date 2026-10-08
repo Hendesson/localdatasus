@@ -1,3 +1,13 @@
+# localdatasus (em desenvolvimento)
+
+Mudanças feitas depois do envio da versão 0.2.0 ao CRAN.
+
+* Nova função `suavizar_taxas()` e argumento `suavizar = TRUE` em `mapa_bairro()` e `mapa_interativo()`: taxa suavizada pelo estimador bayesiano empírico de Marshall (1991), por município, ano e categoria, para bairros com poucos moradores, a partir de uma observação sobre o mapa do Recife.
+* `samu_bairro()`: a documentação avisa que a taxa por morador engana em áreas centrais e hospitalares; para mapas, use `valor = "chamados"`.
+* Correção: tabelas de TabNet guardadas no cache por versões antigas do pacote (com a coluna `coluna` no lugar de `categoria`) são convertidas ao serem lidas, em vez de dar erro.
+* Citação com o DOI do Zenodo (10.5281/zenodo.23244742), que vale para todas as versões; `citation("localdatasus")` traz também o ORCID do autor.
+* Documentação em <https://hendesson.github.io/localdatasus/> (pkgdown), com a referência das funções por tema, os tutoriais como artigos e uma galeria de mapas no README.
+
 # localdatasus 0.2.0
 
 * Correção: a padronização de nomes e rótulos tirava os acentos de forma diferente no macOS ("Etária" virava "Et'aria"), o que podia impedir a escolha de opções nos TabNets. Agora o resultado é o mesmo em Linux, macOS e Windows.

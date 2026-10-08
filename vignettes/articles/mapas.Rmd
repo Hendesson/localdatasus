@@ -82,4 +82,29 @@ htmlwidgets::saveWidget(m, "mapa.html")
 
 Toda tabela tem `lat` e `lon`. No QGIS, use *Camada → Adicionar camada → Texto delimitado*, com X = `lon` e Y = `lat`. Para os polígonos, use `codigo_ibge` para juntar com a malha de bairros do IBGE.
 
+## Bairros com poucos moradores: taxa suavizada
+
+Em bairros com pouca população, poucos casos já produzem taxas muito altas. No Recife, por exemplo, Santo Antônio tem 447 moradores: 24 casos de dengue em 2024 dão 537 por 10 mil, mais que o triplo dos bairros populosos. Essas taxas variam muito por acaso de um ano para outro e dominam a escala do mapa.
+
+A saída é a **taxa suavizada** (bayesiano empírico): cada taxa é puxada em direção à média do município, com força maior nos bairros pouco populosos e quase nenhuma nos populosos.
+
+```r
+dengue <- agravos_bairro("dengue", "Recife", 2024)
+mapa_bairro(dengue, suavizar = TRUE)
+
+# A coluna com a taxa suavizada, para tabelas e análises
+suavizar_taxas(dengue)
+```
+
+No exemplo, Santo Antônio passa de 537 para 224 por 10 mil, enquanto Ibura, com 45 mil moradores, quase não muda (de 144 para 143).
+
+## Local da ocorrência: SAMU
+
+Os chamados do SAMU registram **onde aconteceu** a ocorrência, não onde a pessoa mora. Em áreas centrais, comerciais ou com grandes hospitais, muita gente circula e pouca gente mora, e a taxa por morador fica artificialmente alta. Nesses casos, mapeie a contagem:
+
+```r
+samu <- samu_bairro("Recife", 2024, tipo = "causas externas")
+mapa_bairro(samu, valor = "chamados")
+```
+
 **Próximo:** [4. Internações e microdados com CEP](internacoes-e-cep.html)

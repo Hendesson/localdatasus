@@ -4,7 +4,7 @@
 \alias{mapa_interativo}
 \title{Mapa interativo por bairro}
 \usage{
-mapa_interativo(dados, valor = NULL, cores = "Reds")
+mapa_interativo(dados, valor = NULL, cores = "Reds", suavizar = FALSE)
 }
 \arguments{
 \item{dados}{Tabela de uma das funções do pacote.}
@@ -14,6 +14,10 @@ a taxa por 10 mil habitantes.}
 
 \item{cores}{Paleta do ColorBrewer, por exemplo `"Reds"` (padrão),
 `"Blues"`, `"YlOrRd"`.}
+
+\item{suavizar}{`TRUE` para pintar a taxa suavizada (bayesiano
+empírico, ver [suavizar_taxas()]), recomendada quando há bairros com
+poucos moradores: neles, poucos casos produzem taxas extremas.}
 }
 \value{
 Um mapa `leaflet` (aparece no Viewer do RStudio). Para salvar

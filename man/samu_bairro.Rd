@@ -29,6 +29,16 @@ chamados de Jaboatão dos Guararapes, Olinda, Paulista e outros
 municípios. Fonte: portal de dados abertos da Prefeitura do Recife,
 2016 em diante. As solicitações duplicadas são descartadas.
 }
+\section{Taxa por morador}{
+
+A coluna `taxa_por_10mil` divide os chamados pela população RESIDENTE
+do bairro, mas o SAMU registra o local da ocorrência. Em áreas centrais,
+comerciais ou com grandes hospitais, onde muita gente circula e pouca
+gente mora (no Recife, por exemplo, Santo Antônio tem 447 moradores),
+essa taxa fica artificialmente alta. Para mapas, prefira a contagem:
+`mapa_bairro(x, valor = "chamados")`.
+}
+
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 samu_bairro("Recife", 2024)

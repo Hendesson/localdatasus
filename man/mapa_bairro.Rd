@@ -4,7 +4,13 @@
 \alias{mapa_bairro}
 \title{Mapa por bairro}
 \usage{
-mapa_bairro(dados, valor = NULL, titulo = NULL, cores = "Reds")
+mapa_bairro(
+  dados,
+  valor = NULL,
+  titulo = NULL,
+  cores = "Reds",
+  suavizar = FALSE
+)
 }
 \arguments{
 \item{dados}{Tabela de uma das funções do pacote.}
@@ -16,6 +22,10 @@ a taxa por 10 mil habitantes.}
 
 \item{cores}{Paleta do ColorBrewer, por exemplo `"Reds"` (padrão),
 `"Blues"`, `"YlOrRd"`.}
+
+\item{suavizar}{`TRUE` para pintar a taxa suavizada (bayesiano
+empírico, ver [suavizar_taxas()]), recomendada quando há bairros com
+poucos moradores: neles, poucos casos produzem taxas extremas.}
 }
 \value{
 Um gráfico `ggplot2`.
@@ -41,6 +51,7 @@ Precisa dos pacotes `sf` e `ggplot2`.
 x <- obitos_bairro("Rio de Janeiro", 2023, cid = "I")
 mapa_bairro(x)
 mapa_bairro(x, valor = "obitos", titulo = "Óbitos por doenças circulatórias, 2023")
+mapa_bairro(x, suavizar = TRUE)                                    # taxa suavizada
 mapa_bairro(obitos_bairro("Rio de Janeiro", 2023, por = "sexo"))   # um painel por sexo
 ggplot2::ggsave("mapa.png", width = 8, height = 6, dpi = 300)
 \dontshow{\}) # examplesIf}
